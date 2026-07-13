@@ -1,0 +1,32 @@
+# === Local development artifacts (배포 대상 아님) ===
+.claude/
+.vscode/
+.idea/
+*.log
+*.tmp
+scratchpad/
+
+# === OS-generated files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# === Node / package manager (혹시 나중에 추가되면) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+
+# === Env / secrets ===
+.env
+.env.*
+!.env.example
+
+# === Build / output (해당 시) ===
+dist/
+build/
+.cache/
