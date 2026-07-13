@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Galaxy Z Fold8 | 사전예약 - LG유플러스 공식파트너</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+
+  :root{
+    --bg-0:#000000;
+    --bg-1:#0a0a0d;
+    --bg-2:#131317;
+    --panel:#17171c;
+    --line:rgba(255,255,255,0.09);
+    --line-soft:rgba(255,255,255,0.05);
+    --text-0:#f5f5f7;
+    --text-1:#b8b8c0;
+    --text-2:#7c7c86;
+    --accent:#a5b4d4;
+    --accent-2:#d9c9a3;
+    --accent-glow: rgba(165,180,212,0.35);
+    --gradient-metal: linear-gradient(135deg,#8e97a8 0%,#c9cfdd 25%,#eef1f6 45%,#b7bfd0 60%,#7d8598 80%,#c3cad9 100%);
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    --maxw: 480px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+  body{
+    font-family:'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, 'Malgun Gothic', sans-serif;
+    background:var(--bg-0);
+    color:var(--text-0);
+    line-height:1.5;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  /* Numeric alignment — 전화번호/영업시간/날짜/카운트다운 폭 흔들림 방지 */
+  .tnum, .cd-num, .tl-date, .store-row .v{
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; }
+
+  .page{
+    max-width:var(--maxw);
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg-0);
+    position:relative;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar .brand{
+    font-size:12px;
+    letter-spacing:0.16em;
+    font-weight:700;
+    color:var(--text-1);
+    text-transform:uppercase;
+  }
+  .topbar .carrier{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    padding:5px 10px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    color:var(--accent-2);
+    background:rgba(217,201,163,0.06);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:40px 20px 36px;
+    text-align:center;
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(165,180,212,0.16) 0%, rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:-40%;
+    left:50%;
+    transform:translateX(-50%);
+    width:140%;
+    height:60%;
+    background:radial-gradient(circle, rgba(165,180,212,0.25) 0%, rgba(165,180,212,0) 70%);
+    filter:blur(30px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.18em;
+    color:var(--accent-2);
+    text-transform:uppercase;
+    margin-bottom:20px;
+    position:relative;
+    z-index:1;
+  }
+  .hero-product{
+    position:relative;
+    z-index:1;
+    margin:0 auto 24px;
+    width:100%;
+    max-width:300px;
+    aspect-ratio:3/4;
+    border-radius:28px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0.2) 100%),
+      var(--bg-2);
+    border:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    color:var(--text-2);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .hero-product .ph-icon{
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    border:1.5px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+  }
+  .hero-product .ph-label{
+    font-size:12px;
+    letter-spacing:0.04em;
+    color:var(--text-2);
+  }
+  .hero-product .ph-sub{
+    font-size:10.5px;
+    color:var(--text-2);
+    opacity:0.7;
+  }
+
+  .hero h1{
+    position:relative;
+    z-index:1;
+    font-size:clamp(30px, 8.4vw, 38px);
+    font-weight:900;
+    letter-spacing:-0.025em;
+    line-height:1.18;
+    background:var(--gradient-metal);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:14px;
+  }
+  .hero p.sub{
+    position:relative;
+    z-index:1;
+    font-size:15px;
+    color:var(--text-1);
+    font-weight:400;
+    letter-spacing:-0.005em;
+    margin-bottom:28px;
+  }
+
+  /* Countdown */
+  .countdown{
+    position:relative;
+    z-index:1;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .countdown .cd-box{
+    width:64px;
+    padding:12px 0 10px;
+    border-radius:14px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    text-align:center;
+  }
+  .countdown .cd-num{
+    font-size:25px;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:var(--text-0);
+    letter-spacing:-0.025em;
+  }
+  .countdown .cd-label{
+    font-size:10px;
+    color:var(--text-2);
+    margin-top:4px;
+    letter-spacing:0.15em;
+    font-weight:600;
+  }
+  .countdown-caption{
+    position:relative;
+    z-index:1;
+    font-size:12.5px;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:26px;
+    letter-spacing:0.01em;
+  }
+  .countdown-caption strong{ color:var(--accent-2); }
+
+  .hero-cta{
+    position:relative;
+    z-index:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    max-width:320px;
+    padding:16px 24px;
+    border-radius:100px;
+    background:var(--gradient-metal);
+    color:#0a0a0d;
+    font-size:15.5px;
+    font-weight:700;
+    letter-spacing:-0.015em;
+    box-shadow:0 12px 30px -8px var(--accent-glow);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .hero-cta:active{ transform:scale(0.97); }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:56px 20px; }
+  .section-head{ text-align:center; margin-bottom:32px; }
+  .section-head .tag{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:12px;
+  }
+  .section-head h2{
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:-0.025em;
+    line-height:1.25;
+    color:var(--text-0);
+  }
+  .section-head p{
+    margin-top:10px;
+    font-size:13.5px;
+    color:var(--text-2);
+    font-weight:400;
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline-section{
+    background:var(--bg-1);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .timeline{
+    position:relative;
+    padding-left:28px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:9px;
+    top:6px;
+    bottom:6px;
+    width:1px;
+    background:linear-gradient(180deg, var(--accent) 0%, var(--line) 100%);
+  }
+  .tl-item{
+    position:relative;
+    padding-bottom:30px;
+  }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-dot{
+    position:absolute;
+    left:-28px;
+    top:2px;
+    width:19px;
+    height:19px;
+    border-radius:50%;
+    background:var(--bg-0);
+    border:2px solid var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .tl-item.is-active .tl-dot{
+    background:var(--gradient-metal);
+    box-shadow:0 0 0 4px var(--accent-glow);
+  }
+  .tl-dot::after{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .tl-item.is-active .tl-dot::after{ background:#0a0a0d; }
+  .tl-date{
+    font-size:12px;
+    font-weight:700;
+    color:var(--accent-2);
+    letter-spacing:0.02em;
+    margin-bottom:4px;
+    font-variant-numeric:tabular-nums;
+  }
+  .tl-title{
+    font-size:16.5px;
+    font-weight:800;
+    color:var(--text-0);
+    letter-spacing:-0.015em;
+    margin-bottom:4px;
+  }
+  .tl-desc{
+    font-size:13px;
+    color:var(--text-2);
+    font-weight:400;
+  }
+  .tl-badge{
+    display:inline-block;
+    margin-top:8px;
+    font-size:10.5px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:100px;
+    background:rgba(165,180,212,0.12);
+    color:var(--accent);
+    letter-spacing:0.06em;
+  }
+
+  /* ---------- Benefits ---------- */
+  .benefit-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .benefit-card{
+    padding:20px;
+    border-radius:var(--radius-md);
+    background:var(--panel);
+    border:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .benefit-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:3px;
+    height:100%;
+    background:var(--gradient-metal);
+  }
+  .benefit-card .b-num{
+    font-size:11px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.16em;
+    margin-bottom:8px;
+  }
+  .benefit-card .b-title{
+    font-size:17px;
+    font-weight:800;
+    color:var(--text-0);
+    letter-spacing:-0.015em;
+    margin-bottom:8px;
+  }
+  .benefit-card .b-desc{
+    font-size:13px;
+    color:var(--text-2);
+    font-weight:400;
+    border:1px dashed var(--line);
+    border-radius:var(--radius-sm);
+    padding:10px 12px;
+    line-height:1.55;
+  }
+  .benefit-card .b-desc .ph{
+    color:var(--text-2);
+    opacity:0.75;
+    font-style:italic;
+  }
+  .benefit-note{
+    margin-top:18px;
+    font-size:11.5px;
+    color:var(--text-2);
+    text-align:center;
+    line-height:1.6;
+  }
+
+  /* ---------- CTA section ---------- */
+  .cta-section{
+    text-align:center;
+    background:
+      radial-gradient(100% 80% at 50% 0%, rgba(165,180,212,0.14) 0%, rgba(0,0,0,0) 65%),
+      var(--bg-0);
+  }
+  .cta-section h2{
+    font-size:24px;
+    font-weight:900;
+    margin-bottom:10px;
+    letter-spacing:-0.025em;
+    line-height:1.25;
+  }
+  .cta-section p{
+    font-size:13.5px;
+    color:var(--text-2);
+    margin-bottom:26px;
+    font-weight:400;
+  }
+  .cta-btn-main{
+    display:block;
+    width:100%;
+    padding:18px 24px;
+    border-radius:100px;
+    background:var(--gradient-metal);
+    color:#0a0a0d;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    box-shadow:0 14px 34px -10px var(--accent-glow);
+    margin-bottom:12px;
+    transition:transform .15s ease;
+  }
+  .cta-btn-main:active{ transform:scale(0.97); }
+  .cta-btn-sub{
+    display:block;
+    width:100%;
+    padding:16px 24px;
+    border-radius:100px;
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--text-1);
+    font-size:14.5px;
+    font-weight:600;
+    letter-spacing:-0.005em;
+  }
+  .cta-fineprint{
+    margin-top:18px;
+    font-size:11px;
+    color:var(--text-2);
+    line-height:1.6;
+  }
+
+  /* ---------- Store info / footer ---------- */
+  .store-section{
+    background:var(--bg-1);
+    border-top:1px solid var(--line-soft);
+  }
+  /* Store selector */
+  .store-select-wrap{
+    margin-bottom:16px;
+  }
+  .store-select-label{
+    display:block;
+    font-size:11px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .store-select-inner{
+    position:relative;
+  }
+  .store-select{
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    width:100%;
+    padding:16px 44px 16px 18px;
+    border-radius:var(--radius-md);
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text-0);
+    font-family:inherit;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    line-height:1.3;
+    cursor:pointer;
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .store-select:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(165,180,212,0.18);
+  }
+  .store-select option{
+    background:#17171c;
+    color:var(--text-0);
+    font-weight:500;
+  }
+  .store-select-chevron{
+    position:absolute;
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--accent);
+    font-size:16px;
+    pointer-events:none;
+  }
+
+  /* Map */
+  .map-wrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--panel);
+    margin-bottom:14px;
+  }
+  .map{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    /* 카카오맵은 자체 다크 스킨이 없어 CSS 필터로 다크톤 시뮬레이션.
+       실제 서비스에서는 CustomOverlay 마커로 교체하거나 필터 재보정 권장. */
+    filter: invert(0.88) hue-rotate(180deg) brightness(0.95) contrast(0.85) saturate(0.85);
+  }
+  .map-fallback{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    color:var(--text-2);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2)),
+      var(--panel);
+    text-align:center;
+    padding:20px;
+    z-index:2;
+  }
+  .map-fallback.is-hidden{ display:none; }
+  .map-fallback .mf-icon{ font-size:36px; opacity:0.6; }
+  .map-fallback .mf-title{
+    font-size:14px;
+    font-weight:700;
+    color:var(--text-1);
+    letter-spacing:-0.01em;
+  }
+  .map-fallback .mf-desc{
+    font-size:12px;
+    color:var(--text-2);
+    line-height:1.5;
+  }
+
+  /* Empty state */
+  .store-empty{
+    padding:28px 20px;
+    text-align:center;
+    background:var(--panel);
+    border:1px dashed var(--line);
+    border-radius:var(--radius-md);
+    margin-bottom:14px;
+  }
+  .store-empty.is-hidden{ display:none; }
+  .store-empty .se-icon{
+    font-size:28px;
+    margin-bottom:8px;
+    opacity:0.55;
+  }
+  .store-empty .se-text{
+    font-size:13px;
+    color:var(--text-2);
+    line-height:1.6;
+    font-weight:400;
+  }
+
+  .store-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:22px;
+    margin-bottom:14px;
+  }
+  .store-card .s-label{
+    font-size:11px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .store-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:10px 0;
+    border-bottom:1px solid var(--line-soft);
+    font-size:13.5px;
+  }
+  .store-row:last-child{ border-bottom:none; }
+  .store-row .k{ color:var(--text-2); font-weight:500; }
+  .store-row .v{
+    color:var(--text-0);
+    font-weight:600;
+    text-align:right;
+    letter-spacing:-0.005em;
+  }
+  .store-row .v.ph{ color:var(--text-2); font-style:italic; font-weight:400; }
+
+  .contact-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+  }
+  .contact-buttons a{
+    flex:1;
+    text-align:center;
+    padding:13px 10px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:-0.005em;
+    color:var(--text-1);
+    background:rgba(255,255,255,0.02);
+  }
+  .contact-buttons a.primary{
+    background:var(--gradient-metal);
+    color:#0a0a0d;
+    border:none;
+  }
+
+  footer{
+    padding:32px 20px 40px;
+    text-align:center;
+  }
+  footer .foot-logo{
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:0.18em;
+    color:var(--text-1);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  footer p{
+    font-size:10.5px;
+    color:var(--text-2);
+    line-height:1.7;
+    font-weight:400;
+  }
+
+  @media (min-width:481px){
+    .page{ box-shadow:0 0 60px rgba(0,0,0,0.6); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="brand">GALAXY UNPACKED 2026</div>
+    <div class="carrier">LG유플러스 공식파트너</div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <span class="eyebrow">Reservation Opens Soon</span>
+
+    <div class="hero-product">
+      <div class="ph-icon">📱</div>
+      <div class="ph-label">PRODUCT IMAGE PLACEHOLDER</div>
+      <div class="ph-sub">Galaxy Z Fold8 공식 이미지 삽입 영역</div>
+    </div>
+
+    <h1>Galaxy Z Fold8<br>지금, 먼저 만나보세요</h1>
+    <p class="sub">펼치는 순간, 새로운 기준이 시작됩니다.</p>
+
+    <div class="countdown" id="countdown">
+      <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-label">DAYS</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">HOURS</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">MIN</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">SEC</div></div>
+    </div>
+    <div class="countdown-caption" id="countdown-caption">
+      사전예약 시작까지 <strong>D-DAY</strong>
+    </div>
+
+    <a href="#reserve" class="hero-cta">
+      사전예약 신청하기 <span>›</span>
+    </a>
+  </section>
+
+  <!-- Timeline -->
+  <section class="timeline-section">
+    <div class="section-head">
+      <span class="tag">Schedule</span>
+      <h2>캠페인 일정 안내</h2>
+      <p>언팩부터 정식 출시까지, 한눈에 확인하세요</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2026. 07. 22 (수)</div>
+        <div class="tl-title">Galaxy Unpacked</div>
+        <div class="tl-desc">Galaxy Z Fold8 최초 공개 온라인 언팩 행사</div>
+      </div>
+      <div class="tl-item is-active">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2026. 07. 28 (화) – 08. 03 (월)</div>
+        <div class="tl-title">사전예약 기간</div>
+        <div class="tl-desc">LG유플러스 공식파트너 매장 및 온라인에서 사전예약 진행</div>
+        <span class="tl-badge">7일간 진행</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2026. 08. 07 (금)</div>
+        <div class="tl-title">정식 출시</div>
+        <div class="tl-desc">전국 매장 및 온라인 공식 판매 시작</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="benefits">
+    <div class="section-head">
+      <span class="tag">Pre-order Benefits</span>
+      <h2>사전예약 혜택</h2>
+      <p>사전예약 고객에게만 제공되는 특별 혜택</p>
+    </div>
+
+    <div class="benefit-list">
+      <div class="benefit-card">
+        <div class="b-num">BENEFIT 01</div>
+        <div class="b-title">웰컴 기프트</div>
+        <div class="b-desc"><span class="ph">[여기에 사전예약 웰컴 기프트 내용을 입력하세요]</span></div>
+      </div>
+      <div class="benefit-card">
+        <div class="b-num">BENEFIT 02</div>
+        <div class="b-title">LG U+ 요금 혜택</div>
+        <div class="b-desc"><span class="ph">[여기에 통신사 요금/결합 혜택 내용을 입력하세요]</span></div>
+      </div>
+      <div class="benefit-card">
+        <div class="b-num">BENEFIT 03</div>
+        <div class="b-title">원샵 매장 단독 혜택</div>
+        <div class="b-desc"><span class="ph">[여기에 원샵 매장 방문 고객 대상 추가 혜택을 입력하세요]</span></div>
+      </div>
+    </div>
+
+    <p class="benefit-note">* 상기 혜택은 사정에 따라 변경될 수 있으며, 자세한 내용은 매장에 문의 바랍니다.</p>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="reserve">
+    <h2>지금 바로 예약하고<br>가장 먼저 만나보세요</h2>
+    <p>7월 28일 오픈, 수량 소진 시 조기 마감될 수 있습니다</p>
+
+    <a href="#" class="cta-btn-main" id="reserveBtn">사전예약 신청하기</a>
+    <a href="#store" class="cta-btn-sub">매장 방문 예약하기</a>
+
+    <p class="cta-fineprint">
+      버튼 클릭 시 사전예약 신청 폼 페이지로 연결됩니다.<br>
+      (현재는 연결 대상 미지정 상태 — 폼/링크 URL을 추후 삽입하세요)
+    </p>
+  </section>
+
+  <!-- Store info -->
+  <section class="store-section" id="store">
+    <div class="section-head">
+      <span class="tag">Store Info</span>
+      <h2>매장 안내 및 문의</h2>
+      <p>가까운 LG유플러스 공식파트너 매장을 선택하세요</p>
+    </div>
+
+    <!-- Store selector -->
+    <div class="store-select-wrap">
+      <label class="store-select-label" for="storeSelect">매장 선택</label>
+      <div class="store-select-inner">
+        <select id="storeSelect" class="store-select" aria-label="매장 선택">
+          <option value="">매장을 선택하세요</option>
+        </select>
+        <span class="store-select-chevron" aria-hidden="true">▾</span>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-wrap">
+      <div id="kakaoMap" class="map"></div>
+      <div id="mapFallback" class="map-fallback">
+        <div class="mf-icon">🗺️</div>
+        <div class="mf-title">지도 로드 대기 중</div>
+        <div class="mf-desc">카카오맵 앱키 입력 후 매장을 선택하세요</div>
+      </div>
+    </div>
+
+    <!-- Store detail card (populated by JS) -->
+    <div class="store-card" id="storeCard" hidden>
+      <div class="s-label" id="storeCardLabel">LG유플러스 공식파트너 매장</div>
+      <div class="store-row"><span class="k">매장명</span><span class="v" id="storeName">—</span></div>
+      <div class="store-row"><span class="k">주소</span><span class="v" id="storeAddress">—</span></div>
+      <div class="store-row"><span class="k">영업시간</span><span class="v" id="storeHours">—</span></div>
+      <div class="store-row"><span class="k">문의 전화</span><span class="v" id="storeTel">—</span></div>
+    </div>
+
+    <!-- Empty state before selection -->
+    <div class="store-empty" id="storeEmpty">
+      <div class="se-icon">📍</div>
+      <div class="se-text">위 드롭다운에서 매장을 선택하면<br>상세 정보와 지도 위치가 표시됩니다</div>
+    </div>
+
+    <div class="contact-buttons" id="contactButtons" hidden>
+      <a href="tel:" class="primary" id="btnCall">전화 문의</a>
+      <a href="#" target="_blank" rel="noopener" id="btnRoute">오시는 길</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-logo">GALAXY Z FOLD8 · LG유플러스 공식파트너</div>
+    <p>
+      본 페이지는 사전예약 캠페인 안내를 위한 페이지입니다.<br>
+      상품 이미지 및 상세 혜택은 확정 후 업데이트될 예정입니다.<br>
+      ⓒ 2026. 실제 브랜드 자산 및 상표권은 각 권리자에게 있습니다.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    // 사전예약 시작: 2026-07-28 00:00:00 (KST 기준으로 고정)
+    var target = new Date("2026-07-28T00:00:00+09:00").getTime();
+
+    var elDays = document.getElementById('cd-days');
+    var elHours = document.getElementById('cd-hours');
+    var elMins = document.getElementById('cd-mins');
+    var elSecs = document.getElementById('cd-secs');
+    var caption = document.getElementById('countdown-caption');
+
+    function pad(n){ return String(n).padStart(2,'0'); }
+
+    function tick(){
+      var now = Date.now();
+      var diff = target - now;
+
+      if(diff <= 0){
+        elDays.textContent = '00';
+        elHours.textContent = '00';
+        elMins.textContent = '00';
+        elSecs.textContent = '00';
+        caption.innerHTML = '사전예약이 <strong>진행 중</strong>입니다';
+        return;
+      }
+
+      var days = Math.floor(diff / (1000*60*60*24));
+      var hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      var mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+      var secs = Math.floor((diff % (1000*60)) / 1000);
+
+      elDays.textContent = pad(days);
+      elHours.textContent = pad(hours);
+      elMins.textContent = pad(mins);
+      elSecs.textContent = pad(secs);
+
+      caption.innerHTML = '사전예약 시작까지 <strong>D-' + days + '</strong>';
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  // CTA button: placeholder link behavior (구조만 제공, 실제 URL은 추후 연결)
+  document.getElementById('reserveBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    console.log('[TODO] 사전예약 폼 URL 연결 필요 — 이 버튼의 href/이벤트를 교체하세요.');
+  });
+
+  /* ============================================================
+     STORE DATA — 매장 정보 (더미 20개, 실제 데이터로 교체하세요)
+     lat/lng는 카카오맵 좌표. kakaomapUrl은 카카오맵 상세페이지
+     길찾기 링크(선택). 미지정 시 좌표 기반 지도앱 링크 생성.
+     ============================================================ */
+  var stores = [
+    { id:"store01", name:"원샵 1호점 강남점",   address:"서울특별시 강남구 테헤란로 123",  lat:37.5010, lng:127.0396, hours:"평일 10:00 - 21:00 / 주말 10:00 - 20:00", tel:"02-1111-0001", kakaomapUrl:"" },
+    { id:"store02", name:"원샵 2호점 홍대점",   address:"서울특별시 마포구 양화로 45",     lat:37.5563, lng:126.9236, hours:"평일 10:00 - 22:00 / 주말 10:00 - 21:00", tel:"02-1111-0002", kakaomapUrl:"" },
+    { id:"store03", name:"원샵 3호점 잠실점",   address:"서울특별시 송파구 올림픽로 300",  lat:37.5133, lng:127.1028, hours:"매일 10:30 - 22:00",                     tel:"02-1111-0003", kakaomapUrl:"" },
+    { id:"store04", name:"원샵 4호점 여의도점", address:"서울특별시 영등포구 국제금융로 10", lat:37.5251, lng:126.9245, hours:"평일 09:30 - 20:00 / 주말 휴무",         tel:"02-1111-0004", kakaomapUrl:"" },
+    { id:"store05", name:"원샵 5호점 성수점",   address:"서울특별시 성동구 성수이로 100",   lat:37.5443, lng:127.0557, hours:"평일 11:00 - 21:00 / 주말 11:00 - 20:00", tel:"02-1111-0005", kakaomapUrl:"" },
+    { id:"store06", name:"원샵 6호점 노원점",   address:"서울특별시 노원구 노해로 480",     lat:37.6541, lng:127.0603, hours:"매일 10:00 - 21:00",                     tel:"02-1111-0006", kakaomapUrl:"" },
+    { id:"store07", name:"원샵 7호점 신촌점",   address:"서울특별시 서대문구 신촌로 90",    lat:37.5559, lng:126.9367, hours:"평일 10:00 - 22:00 / 일요일 11:00 - 21:00", tel:"02-1111-0007", kakaomapUrl:"" },
+    { id:"store08", name:"원샵 8호점 목동점",   address:"서울특별시 양천구 목동동로 293",   lat:37.5449, lng:126.8747, hours:"매일 10:00 - 21:00",                     tel:"02-1111-0008", kakaomapUrl:"" },
+    { id:"store09", name:"원샵 9호점 수원점",   address:"경기도 수원시 팔달구 인계로 178",   lat:37.2664, lng:127.0281, hours:"평일 09:30 - 20:30 / 주말 10:00 - 20:00", tel:"031-1111-0009", kakaomapUrl:"" },
+    { id:"store10", name:"원샵 10호점 분당점",  address:"경기도 성남시 분당구 판교역로 235", lat:37.4028, lng:127.1085, hours:"매일 10:00 - 21:00",                     tel:"031-1111-0010", kakaomapUrl:"" },
+    { id:"store11", name:"원샵 11호점 인천점",  address:"인천광역시 남동구 예술로 152",     lat:37.4485, lng:126.7042, hours:"평일 10:00 - 21:00 / 주말 10:30 - 20:00", tel:"032-1111-0011", kakaomapUrl:"" },
+    { id:"store12", name:"원샵 12호점 부천점",  address:"경기도 부천시 부일로 400",         lat:37.5036, lng:126.7660, hours:"매일 10:00 - 21:00",                     tel:"032-1111-0012", kakaomapUrl:"" },
+    { id:"store13", name:"원샵 13호점 일산점",  address:"경기도 고양시 일산동구 중앙로 1275", lat:37.6584, lng:126.7723, hours:"매일 10:30 - 21:30",                     tel:"031-1111-0013", kakaomapUrl:"" },
+    { id:"store14", name:"원샵 14호점 대전점",  address:"대전광역시 서구 둔산대로 130",     lat:36.3520, lng:127.3778, hours:"평일 09:30 - 20:30 / 주말 10:00 - 20:00", tel:"042-1111-0014", kakaomapUrl:"" },
+    { id:"store15", name:"원샵 15호점 대구점",  address:"대구광역시 중구 동성로 88",         lat:35.8703, lng:128.5945, hours:"매일 10:30 - 21:30",                     tel:"053-1111-0015", kakaomapUrl:"" },
+    { id:"store16", name:"원샵 16호점 부산점",  address:"부산광역시 해운대구 우동 1467",     lat:35.1631, lng:129.1636, hours:"매일 10:00 - 22:00",                     tel:"051-1111-0016", kakaomapUrl:"" },
+    { id:"store17", name:"원샵 17호점 서면점",  address:"부산광역시 부산진구 중앙대로 691", lat:35.1579, lng:129.0596, hours:"매일 10:30 - 21:30",                     tel:"051-1111-0017", kakaomapUrl:"" },
+    { id:"store18", name:"원샵 18호점 광주점",  address:"광주광역시 서구 상무중앙로 84",     lat:35.1508, lng:126.8467, hours:"평일 10:00 - 21:00 / 주말 10:30 - 20:00", tel:"062-1111-0018", kakaomapUrl:"" },
+    { id:"store19", name:"원샵 19호점 울산점",  address:"울산광역시 남구 삼산로 288",        lat:35.5385, lng:129.3320, hours:"매일 10:00 - 21:00",                     tel:"052-1111-0019", kakaomapUrl:"" },
+    { id:"store20", name:"원샵 20호점 제주점",  address:"제주특별자치도 제주시 중앙로 123", lat:33.4996, lng:126.5312, hours:"매일 10:30 - 21:00 (연중무휴)",            tel:"064-1111-0020", kakaomapUrl:"" }
+  ];
+
+  /* ============================================================
+     STORE SELECTOR + DETAIL RENDERING
+     ============================================================ */
+  (function(){
+    var sel        = document.getElementById('storeSelect');
+    var card       = document.getElementById('storeCard');
+    var emptyState = document.getElementById('storeEmpty');
+    var btnBar     = document.getElementById('contactButtons');
+    var nameEl     = document.getElementById('storeName');
+    var addrEl     = document.getElementById('storeAddress');
+    var hoursEl    = document.getElementById('storeHours');
+    var telEl      = document.getElementById('storeTel');
+    var btnCall    = document.getElementById('btnCall');
+    var btnRoute   = document.getElementById('btnRoute');
+
+    // Populate dropdown
+    stores.forEach(function(s){
+      var opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = s.name;
+      sel.appendChild(opt);
+    });
+
+    function findStore(id){
+      for (var i=0; i<stores.length; i++) if (stores[i].id === id) return stores[i];
+      return null;
+    }
+
+    function routeUrl(s){
+      if (s.kakaomapUrl) return s.kakaomapUrl;
+      // 좌표 기반 카카오맵 길찾기 링크 (앱/웹 자동 라우팅)
+      return 'https://map.kakao.com/link/to/' +
+        encodeURIComponent(s.name) + ',' + s.lat + ',' + s.lng;
+    }
+
+    function renderStore(s){
+      if (!s){
+        card.hidden = true;
+        btnBar.hidden = true;
+        emptyState.classList.remove('is-hidden');
+        return;
+      }
+      nameEl.textContent  = s.name;
+      addrEl.textContent  = s.address;
+      hoursEl.textContent = s.hours;
+      telEl.textContent   = s.tel;
+      btnCall.href  = 'tel:' + s.tel.replace(/[^0-9+]/g,'');
+      btnRoute.href = routeUrl(s);
+
+      card.hidden = false;
+      btnBar.hidden = false;
+      emptyState.classList.add('is-hidden');
+
+      updateMap(s);
+    }
+
+    sel.addEventListener('change', function(){
+      renderStore(findStore(sel.value));
+    });
+
+    // Expose for map init timing
+    window.__renderSelectedStore = function(){
+      if (sel.value) renderStore(findStore(sel.value));
+    };
+  })();
+
+  /* ============================================================
+     KAKAO MAP INIT
+     - appkey는 https://developers.kakao.com 에서 발급 후 아래 자리에
+       교체하세요. "플랫폼 > Web"에 실제 서비스 도메인 등록 필수.
+     ============================================================ */
+  var KAKAO_APP_KEY = "80d58aeb4e69096faa8e1c254bfc0510";  // JavaScript 키
+
+  var kakaoMap = null;
+  var kakaoMarker = null;
+
+  function loadKakaoSDK(){
+    return new Promise(function(resolve, reject){
+      if (window.kakao && window.kakao.maps){ resolve(); return; }
+      if (!KAKAO_APP_KEY || KAKAO_APP_KEY.indexOf('[') === 0){
+        reject(new Error('앱키 미설정'));
+        return;
+      }
+      var s = document.createElement('script');
+      s.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=" +
+        encodeURIComponent(KAKAO_APP_KEY) + "&autoload=false";
+      s.onload = function(){
+        window.kakao.maps.load(function(){ resolve(); });
+      };
+      s.onerror = function(){ reject(new Error('SDK 로드 실패')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function initKakaoMap(center){
+    var el = document.getElementById('kakaoMap');
+    kakaoMap = new kakao.maps.Map(el, {
+      center: new kakao.maps.LatLng(center.lat, center.lng),
+      level: 4
+    });
+    kakaoMarker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(center.lat, center.lng),
+      map: kakaoMap
+    });
+    document.getElementById('mapFallback').classList.add('is-hidden');
+  }
+
+  function updateMap(store){
+    if (!store) return;
+    if (!kakaoMap){
+      loadKakaoSDK().then(function(){
+        initKakaoMap(store);
+      }).catch(function(err){
+        // SDK 미로드 상태 — fallback 유지, 안내 메시지 갱신
+        var fb = document.getElementById('mapFallback');
+        fb.classList.remove('is-hidden');
+        fb.querySelector('.mf-title').textContent = '지도 표시 불가';
+        fb.querySelector('.mf-desc').textContent =
+          '카카오 앱키를 발급받아 KAKAO_APP_KEY에 입력하세요.\n(' + err.message + ')';
+        console.warn('[Kakao Map] ' + err.message);
+      });
+      return;
+    }
+    var pos = new kakao.maps.LatLng(store.lat, store.lng);
+    kakaoMap.setCenter(pos);
+    kakaoMarker.setPosition(pos);
+  }
+</script>
+
+</body>
+</html>
