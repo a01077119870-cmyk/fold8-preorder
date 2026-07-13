@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<!-- 히어로 타이틀은 이미지(assets/hero-title.png)로 교체됨 — 별도 웹폰트 불필요 -->
 <style>
 
   :root{
@@ -165,23 +166,44 @@
     opacity:0.7;
   }
 
-  .hero h1{
+  /* 히어로 영문 타이틀 — 공식 마케팅 이미지 사용 */
+  .hero-title-heading{
     position:relative;
     z-index:1;
-    font-size:clamp(30px, 8.4vw, 38px);
-    font-weight:900;
-    letter-spacing:-0.025em;
-    line-height:1.18;
-    background:var(--gradient-metal);
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:14px;
+    margin:0 auto 12px;
+    /* h1 기본 스타일 리셋 (텍스트 없는 이미지 컨테이너) */
+    font-size:0;
+    line-height:0;
+  }
+  .hero-title-img{
+    /* 반응형: 작은 화면에서는 화면 폭에 맞춰 축소, 큰 화면에서도 과하게 커지지 않게 */
+    width:clamp(240px, 82vw, 380px);
+    height:auto;
+    display:block;
+    margin:0 auto;
+    /* 이미지 로드 전/실패 시 alt 텍스트 스타일 (fallback) */
+    font-family:'Pretendard', -apple-system, sans-serif;
+    font-size:22px;
+    font-weight:800;
+    color:var(--text-1);
+    line-height:1.2;
+    letter-spacing:-0.01em;
+  }
+  /* 한글 보조 카피 (기존 "지금, 먼저 만나보세요" 톤 낮춤) */
+  .hero .hero-sub-ko{
+    position:relative;
+    z-index:1;
+    font-family:'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size:14px;
+    color:var(--accent-2);
+    font-weight:600;
+    letter-spacing:-0.005em;
+    margin-bottom:6px;
   }
   .hero p.sub{
     position:relative;
     z-index:1;
-    font-size:15px;
+    font-size:14px;
     color:var(--text-1);
     font-weight:400;
     letter-spacing:-0.005em;
@@ -816,7 +838,12 @@
       <div class="ph-sub">Galaxy Z Fold8 공식 이미지 삽입 영역</div>
     </div>
 
-    <h1>Galaxy Z Fold8<br>지금, 먼저 만나보세요</h1>
+    <h1 class="hero-title-heading">
+      <img src="assets/hero-title.png"
+           alt="Galaxy Z Flip · Z Fold 8 Series"
+           class="hero-title-img">
+    </h1>
+    <p class="hero-sub-ko">지금, 먼저 만나보세요</p>
     <p class="sub">펼치는 순간, 새로운 기준이 시작됩니다.</p>
 
     <div class="countdown" id="countdown">
