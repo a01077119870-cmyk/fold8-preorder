@@ -614,9 +614,7 @@
     inset:0;
     width:100%;
     height:100%;
-    /* 카카오맵은 자체 다크 스킨이 없어 CSS 필터로 다크톤 시뮬레이션.
-       실제 서비스에서는 CustomOverlay 마커로 교체하거나 필터 재보정 권장. */
-    filter: invert(0.88) hue-rotate(180deg) brightness(0.95) contrast(0.85) saturate(0.85);
+    /* 카카오맵 원본 라이트 톤 그대로 사용 (가독성 우선) */
   }
   .map-fallback{
     position:absolute;
