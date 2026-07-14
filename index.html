@@ -814,6 +814,237 @@
     font-weight:400;
   }
 
+  /* ═══════════════════════════════════════
+     BENEFIT 02 확장: LG U+ 요금제 비교 카드
+     ═══════════════════════════════════════ */
+  :root{
+    --plan-accent:#a78bfa;   /* 요금제 강조용 보라 */
+    --plan-accent-2:#c4b5fd;
+    --plan-glow:rgba(167,139,250,0.16);
+  }
+
+  /* BENEFIT 02 카드는 폭 넓게 사용 */
+  .benefit-card-plans{
+    padding:20px 16px;
+  }
+  .benefit-card-plans .b-desc-full{
+    margin-top:12px;
+  }
+
+  /* 필터 칩 */
+  .plan-filters{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    padding:2px 0 4px;
+    margin-bottom:14px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .plan-filters::-webkit-scrollbar{ display:none; }
+  .plan-chip{
+    flex-shrink:0;
+    padding:8px 14px;
+    border-radius:100px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--text-1);
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .plan-chip.is-active{
+    background:var(--plan-accent);
+    border-color:var(--plan-accent);
+    color:#17171c;
+  }
+
+  /* 카테고리 그룹 (아코디언) */
+  .plan-group{
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--line);
+    border-radius:12px;
+    margin-bottom:10px;
+    overflow:hidden;
+  }
+  .plan-group.is-hidden{ display:none; }
+  .plan-group-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 14px;
+    background:transparent;
+    border:none;
+    color:var(--text-0);
+    font-family:inherit;
+    text-align:left;
+    cursor:pointer;
+  }
+  .plan-group-header .pgh-label{
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    margin-bottom:2px;
+  }
+  .plan-group-header .pgh-summary{
+    font-size:11px;
+    color:var(--text-2);
+    font-weight:500;
+    letter-spacing:-0.005em;
+  }
+  .plan-group-header .pgh-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .plan-group-header .pgh-price{
+    font-size:12px;
+    color:var(--plan-accent-2);
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+  }
+  .plan-group-header .pgh-price strong{
+    font-size:14px;
+    color:var(--plan-accent);
+  }
+  .plan-group-header .pgh-chevron{
+    display:inline-block;
+    color:var(--text-2);
+    font-size:14px;
+    transition:transform .2s ease;
+    line-height:1;
+  }
+  .plan-group.is-open .plan-group-header .pgh-chevron{
+    transform:rotate(180deg);
+    color:var(--plan-accent);
+  }
+  .plan-group-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+  }
+  .plan-group.is-open .plan-group-body{
+    max-height:5000px;
+  }
+  .plan-list{
+    list-style:none;
+    padding:0 8px 8px;
+    margin:0;
+  }
+  .plan-row{
+    padding:12px;
+    border-top:1px solid var(--line-soft);
+    background:transparent;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .plan-row:first-child{ border-top:none; }
+  .plan-row.is-featured{
+    background:linear-gradient(135deg, rgba(167,139,250,0.08), transparent 60%);
+    border-top:1px solid var(--plan-accent);
+    border-radius:8px;
+    margin:4px 0;
+  }
+  .plan-row .plan-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:2px;
+  }
+  .plan-name{
+    font-size:14px;
+    font-weight:800;
+    color:var(--text-0);
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .plan-badge{
+    display:inline-block;
+    padding:2px 7px;
+    border-radius:100px;
+    background:var(--plan-accent);
+    color:#17171c;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:0.02em;
+    line-height:1.3;
+  }
+  .plan-price{
+    font-size:15px;
+    font-weight:800;
+    color:var(--plan-accent);
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .plan-price .won{
+    font-size:11px;
+    font-weight:600;
+    color:var(--plan-accent-2);
+    margin-left:1px;
+  }
+  .plan-data{
+    font-size:12px;
+    color:var(--text-1);
+    line-height:1.5;
+    letter-spacing:-0.005em;
+    word-break:keep-all;
+  }
+  .plan-data strong{
+    color:var(--plan-accent-2);
+    font-weight:700;
+  }
+  .plan-extra{
+    font-size:10.5px;
+    color:var(--text-2);
+    line-height:1.5;
+    font-weight:400;
+    letter-spacing:-0.005em;
+    word-break:keep-all;
+  }
+
+  /* CTA 버튼 (요금제 섹션 하단) */
+  .plan-inquiry-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+    padding:14px;
+    margin-top:14px;
+    border-radius:100px;
+    background:var(--plan-accent);
+    color:#17171c;
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    box-shadow:0 8px 24px -8px var(--plan-glow);
+    transition:transform .15s ease;
+    text-align:center;
+  }
+  .plan-inquiry-btn:active{ transform:scale(0.97); }
+
+  .plan-note{
+    margin-top:12px;
+    font-size:10.5px;
+    color:var(--text-2);
+    line-height:1.55;
+    text-align:center;
+    letter-spacing:-0.005em;
+  }
+
   @media (min-width:481px){
     .page{ box-shadow:0 0 60px rgba(0,0,0,0.6); }
   }
@@ -916,10 +1147,34 @@
         <div class="b-title">웰컴 기프트</div>
         <div class="b-desc"><span class="ph">[여기에 사전예약 웰컴 기프트 내용을 입력하세요]</span></div>
       </div>
-      <div class="benefit-card">
+      <div class="benefit-card benefit-card-plans">
         <div class="b-num">BENEFIT 02</div>
-        <div class="b-title">LG U+ 요금 혜택</div>
-        <div class="b-desc"><span class="ph">[여기에 통신사 요금/결합 혜택 내용을 입력하세요]</span></div>
+        <div class="b-title">LG U+ 요금제 안내</div>
+        <div class="b-desc-full">
+          <!-- 필터 칩 -->
+          <div class="plan-filters" role="tablist" aria-label="요금제 카테고리 필터">
+            <button type="button" class="plan-chip is-active" data-filter="all" role="tab" aria-selected="true">전체</button>
+            <button type="button" class="plan-chip" data-filter="plus" role="tab" aria-selected="false">플러스플랜</button>
+            <button type="button" class="plan-chip" data-filter="data-large" role="tab" aria-selected="false">데이터플랜 대용량</button>
+            <button type="button" class="plan-chip" data-filter="data-basic" role="tab" aria-selected="false">데이터플랜 기본</button>
+          </div>
+
+          <!-- 요금제 그룹 컨테이너 (JS로 렌더링) -->
+          <div id="planGroups"></div>
+
+          <!-- 가입 문의 CTA -->
+          <a href="https://docs.google.com/forms/d/1rZtQuB45pA2lJptNGGVBEbPoNyK-33_MMFcpeDQc380/viewform"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="plan-inquiry-btn">
+            요금제 가입 문의하기 <span>›</span>
+          </a>
+
+          <p class="plan-note">
+            ※ 2026년 6월 심플리 2.0 개편 기준 요금이며,<br>
+            실제 가입 시 결합 할인 등은 매장에서 다시 확인해주세요.
+          </p>
+        </div>
       </div>
       <div class="benefit-card">
         <div class="b-num">BENEFIT 03</div>
@@ -1087,6 +1342,149 @@
 
   // 사전예약 CTA 버튼은 href로 직접 연결됨 (assets/… 또는 구글 폼 등)
   // preventDefault 하지 않고 <a href="..." target="_blank"> 기본 동작을 사용
+
+  /* ============================================================
+     PLAN DATA — LG U+ 요금제 (2026-06 심플리 2.0 기준)
+     ============================================================ */
+  var planCategories = [
+    { id:"all",        label:"전체" },
+    { id:"plus",       label:"플러스플랜" },
+    { id:"data-large", label:"데이터플랜 대용량" },
+    { id:"data-basic", label:"데이터플랜 기본" }
+  ];
+
+  var plans = [
+    // 플러스플랜
+    { id:"plus130", category:"plus", name:"플러스플랜130", price:"130,000원", data:"데이터 무제한 · 테더링+쉐어링 120GB · 참쉬운가족데이터 60GB", extra:"프리미엄플러스, 데일리플러스" },
+    { id:"plus115", category:"plus", name:"플러스플랜115", price:"115,000원", data:"데이터 무제한 · 테더링+쉐어링 100GB · 참쉬운가족데이터 50GB", extra:"프리미엄플러스, 데일리플러스" },
+    { id:"plus105", category:"plus", name:"플러스플랜105", price:"105,000원", data:"데이터 무제한 · 테더링+쉐어링 100GB",                          extra:"프리미엄플러스, 데일리플러스" },
+    { id:"plus95",  category:"plus", name:"플러스플랜95",  price:"95,000원",  data:"데이터 무제한 · 테더링+쉐어링 80GB",                           extra:"데일리플러스" },
+
+    // 데이터플랜 - 대용량
+    { id:"data-max", category:"data-large", name:"데이터플랜MAX",   price:"85,000원", data:"데이터 무제한",                       extra:"음성통화 무제한, 문자 기본제공", badge:"추천" },
+    { id:"data-150", category:"data-large", name:"데이터플랜150GB", price:"75,000원", data:"150GB + 다 쓰면 최대 5Mbps",         extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-125", category:"data-large", name:"데이터플랜125GB", price:"70,000원", data:"125GB + 다 쓰면 최대 5Mbps",         extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-95",  category:"data-large", name:"데이터플랜95GB",  price:"68,000원", data:"95GB + 다 쓰면 최대 3Mbps",          extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-80",  category:"data-large", name:"데이터플랜80GB",  price:"66,000원", data:"80GB + 다 쓰면 최대 1Mbps",          extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-50",  category:"data-large", name:"데이터플랜50GB",  price:"63,000원", data:"50GB + 다 쓰면 최대 1Mbps",          extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-31",  category:"data-large", name:"데이터플랜31GB",  price:"61,000원", data:"31GB + 다 쓰면 최대 1Mbps",          extra:"음성통화 무제한, 문자 기본제공" },
+
+    // 데이터플랜 - 기본
+    { id:"data-24",    category:"data-basic", name:"데이터플랜24GB",   price:"59,000원", data:"24GB + 다 쓰면 최대 1Mbps",   extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-14",    category:"data-basic", name:"데이터플랜14GB",   price:"55,000원", data:"14GB + 다 쓰면 최대 1Mbps",   extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-9",     category:"data-basic", name:"데이터플랜9GB",    price:"47,000원", data:"9GB + 다 쓰면 최대 400Kbps",  extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-5",     category:"data-basic", name:"데이터플랜5GB",    price:"37,000원", data:"5GB + 다 쓰면 최대 400Kbps",  extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-1.5",   category:"data-basic", name:"데이터플랜1.5GB",  price:"33,000원", data:"1.5GB + 다 쓰면 최대 400Kbps", extra:"음성통화 무제한, 문자 기본제공" },
+    { id:"data-750mb", category:"data-basic", name:"데이터플랜750MB",  price:"29,000원", data:"750MB + 다 쓰면 최대 400Kbps", extra:"음성통화 125분, 문자 150건" },
+    { id:"data-300mb", category:"data-basic", name:"데이터플랜300MB",  price:"28,000원", data:"300MB + 다 쓰면 최대 400Kbps", extra:"음성통화 125분, 문자 150건" }
+  ];
+
+  /* ============================================================
+     PLAN RENDERING (필터 칩 + 아코디언)
+     ============================================================ */
+  (function(){
+    var container = document.getElementById('planGroups');
+    if (!container) return;
+
+    // 각 카테고리별 요약 (최저가/최저용량) 계산용 헬퍼
+    function toWon(str){ return parseInt(String(str).replace(/[^0-9]/g,''), 10) || 0; }
+
+    var groupMeta = {
+      "plus":       { label:"플러스플랜",       summary:"데이터 무제한 · OTT/AI 프리미엄 혜택" },
+      "data-large": { label:"데이터플랜 대용량", summary:"31GB ~ 무제한 · 음성/문자 무제한" },
+      "data-basic": { label:"데이터플랜 기본",   summary:"300MB ~ 24GB · 합리적인 요금" }
+    };
+
+    function formatPrice(p){
+      // "130,000원" -> "130,000원~" 강조 렌더
+      return p.replace(/([0-9,]+)(원)/, '<strong>$1</strong>$2');
+    }
+
+    // 카테고리별 렌더링
+    ['plus', 'data-large', 'data-basic'].forEach(function(cat){
+      var items = plans.filter(function(p){ return p.category === cat; });
+      if (items.length === 0) return;
+
+      var minPrice = items.reduce(function(m, p){ return Math.min(m, toWon(p.price)); }, Infinity);
+      var meta = groupMeta[cat];
+
+      var group = document.createElement('div');
+      group.className = 'plan-group';
+      group.setAttribute('data-category', cat);
+
+      var header = document.createElement('button');
+      header.type = 'button';
+      header.className = 'plan-group-header';
+      header.setAttribute('aria-expanded', 'false');
+      header.innerHTML =
+        '<div class="pgh-left">' +
+          '<div class="pgh-label">' + meta.label + '</div>' +
+          '<div class="pgh-summary">' + meta.summary + '</div>' +
+        '</div>' +
+        '<div class="pgh-right">' +
+          '<div class="pgh-price">월 <strong>' + minPrice.toLocaleString('ko-KR') + '원</strong>~</div>' +
+          '<span class="pgh-chevron" aria-hidden="true">▾</span>' +
+        '</div>';
+
+      var body = document.createElement('div');
+      body.className = 'plan-group-body';
+
+      var list = document.createElement('ul');
+      list.className = 'plan-list';
+
+      items.forEach(function(p){
+        var row = document.createElement('li');
+        row.className = 'plan-row' + (p.badge ? ' is-featured' : '');
+        var badgeHtml = p.badge ? '<span class="plan-badge">' + p.badge + '</span>' : '';
+        row.innerHTML =
+          '<div class="plan-head">' +
+            '<div class="plan-name">' + p.name + badgeHtml + '</div>' +
+            '<div class="plan-price">' + formatPrice(p.price) + '</div>' +
+          '</div>' +
+          '<div class="plan-data">' + p.data + '</div>' +
+          '<div class="plan-extra">' + p.extra + '</div>';
+        list.appendChild(row);
+      });
+
+      body.appendChild(list);
+      group.appendChild(header);
+      group.appendChild(body);
+      container.appendChild(group);
+
+      // 아코디언 토글
+      header.addEventListener('click', function(){
+        var opened = group.classList.toggle('is-open');
+        header.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      });
+    });
+
+    // 필터 칩
+    var chips = document.querySelectorAll('.plan-chip');
+    var groups = container.querySelectorAll('.plan-group');
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var filter = chip.getAttribute('data-filter');
+        chips.forEach(function(c){
+          var active = c === chip;
+          c.classList.toggle('is-active', active);
+          c.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        groups.forEach(function(g){
+          var cat = g.getAttribute('data-category');
+          var visible = (filter === 'all' || filter === cat);
+          g.classList.toggle('is-hidden', !visible);
+          // 특정 카테고리 필터 시 자동 펼침, 전체는 접은 상태
+          if (filter !== 'all' && visible){
+            g.classList.add('is-open');
+            g.querySelector('.plan-group-header').setAttribute('aria-expanded','true');
+          } else if (filter === 'all'){
+            g.classList.remove('is-open');
+            g.querySelector('.plan-group-header').setAttribute('aria-expanded','false');
+          }
+        });
+      });
+    });
+  })();
 
   /* ============================================================
      STORE DATA — 매장 정보 (실제 데이터)
