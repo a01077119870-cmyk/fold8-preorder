@@ -75,11 +75,10 @@
     border-bottom:1px solid var(--line-soft);
   }
   .topbar .brand{
-    font-size:12px;
-    letter-spacing:0.16em;
+    font-size:12.5px;
+    letter-spacing:0.02em;   /* 한글 기준 자간 축소 (영문 대문자 시 0.16em) */
     font-weight:700;
     color:var(--text-1);
-    text-transform:uppercase;
   }
   .topbar .carrier{
     font-size:11px;
@@ -116,11 +115,10 @@
   }
   .eyebrow{
     display:inline-block;
-    font-size:11.5px;
+    font-size:12px;
     font-weight:700;
-    letter-spacing:0.18em;
+    letter-spacing:0.02em;   /* 한글 기준 자간 축소 (영문 대문자 시 0.18em) */
     color:var(--accent-2);
-    text-transform:uppercase;
     margin-bottom:20px;
     position:relative;
     z-index:1;
@@ -1043,6 +1041,268 @@
     letter-spacing:-0.005em;
   }
 
+  /* ═══════════════════════════════════════
+     월 예상 청구요금 계산기
+     ═══════════════════════════════════════ */
+  .calc-section{
+    background:var(--bg-1);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .calc-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:20px 16px;
+  }
+
+  /* 방식 탭 (공시지원금 vs 선택약정) */
+  .calc-tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    padding:4px;
+    background:rgba(0,0,0,0.3);
+    border-radius:12px;
+    margin-bottom:14px;
+  }
+  .calc-tab{
+    padding:11px 8px;
+    border-radius:9px;
+    background:transparent;
+    border:none;
+    color:var(--text-2);
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .calc-tab.is-active{
+    background:var(--plan-accent);
+    color:#17171c;
+  }
+
+  /* 할부 개월수 토글 */
+  .calc-months{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 4px;
+    margin-bottom:14px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .calc-months-label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--text-2);
+    letter-spacing:0.02em;
+  }
+  .calc-months-toggle{
+    display:inline-flex;
+    background:rgba(0,0,0,0.3);
+    border-radius:100px;
+    padding:3px;
+    gap:2px;
+  }
+  .calc-month-btn{
+    padding:7px 14px;
+    border-radius:100px;
+    background:transparent;
+    border:none;
+    color:var(--text-2);
+    font-family:inherit;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+    font-variant-numeric:tabular-nums;
+  }
+  .calc-month-btn.is-active{
+    background:#f5f5f7;
+    color:#0a0a0d;
+  }
+
+  /* 입력란 */
+  .calc-inputs{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .calc-input-row{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .cir-label{
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--text-2);
+    letter-spacing:-0.005em;
+  }
+  .cir-input-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+  .cir-input, .cir-select{
+    width:100%;
+    padding:11px 40px 11px 14px;
+    border-radius:10px;
+    background:rgba(0,0,0,0.25);
+    border:1px solid var(--line);
+    color:var(--text-0);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:-0.005em;
+    outline:none;
+    font-variant-numeric:tabular-nums;
+    text-align:right;
+    transition:border-color .15s ease, box-shadow .15s ease;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+  }
+  .cir-select{
+    text-align:left;
+    padding-right:34px;
+    cursor:pointer;
+    background-image:linear-gradient(45deg, transparent 50%, var(--plan-accent) 50%),
+                     linear-gradient(135deg, var(--plan-accent) 50%, transparent 50%);
+    background-position:calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+    background-size:5px 5px, 5px 5px;
+    background-repeat:no-repeat;
+  }
+  .cir-input:focus, .cir-select:focus{
+    border-color:var(--plan-accent);
+    box-shadow:0 0 0 3px var(--plan-glow);
+  }
+  .cir-input[readonly]{
+    background:rgba(0,0,0,0.15);
+    color:var(--text-1);
+    cursor:default;
+    border-style:dashed;
+  }
+  .cir-input[readonly]:focus{
+    border-color:var(--line);
+    box-shadow:none;
+  }
+  .cir-label .cir-hint{
+    font-size:10.5px;
+    color:var(--text-2);
+    font-weight:500;
+    margin-left:3px;
+  }
+  .calc-subsidy-notice{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 12px;
+    background:rgba(255,193,7,0.08);
+    border:1px solid rgba(255,193,7,0.22);
+    border-radius:8px;
+    color:#f5d78e;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:-0.005em;
+    margin:4px 0 -2px;
+  }
+  .calc-subsidy-notice.is-hidden{ display:none; }
+  .calc-subsidy-notice .csn-icon{
+    flex-shrink:0;
+    font-size:12px;
+    opacity:0.9;
+  }
+  .cr-notice{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:6px 10px;
+    background:rgba(255,193,7,0.10);
+    border:1px solid rgba(255,193,7,0.28);
+    border-radius:6px;
+    color:#f5d78e;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.01em;
+    margin-bottom:10px;
+  }
+  .cr-notice.is-hidden{ display:none; }
+  .cr-notice .crn-icon{ font-size:11px; }
+  .cir-unit{
+    position:absolute;
+    right:14px;
+    color:var(--text-2);
+    font-size:12px;
+    font-weight:600;
+    pointer-events:none;
+  }
+
+  /* 결과 카드 */
+  .calc-result{
+    background:linear-gradient(135deg, rgba(167,139,250,0.10), rgba(167,139,250,0.03) 60%);
+    border:1px solid rgba(167,139,250,0.28);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:12px;
+  }
+  .cr-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:8px 0;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+    font-size:12.5px;
+  }
+  .cr-row:last-child{ border-bottom:none; }
+  .cr-key{
+    color:var(--text-1);
+    font-weight:500;
+  }
+  .cr-key .cr-hint{
+    font-size:10.5px;
+    color:var(--text-2);
+    font-weight:400;
+    margin-left:3px;
+  }
+  .cr-val{
+    color:var(--text-0);
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-0.005em;
+  }
+  .cr-row.cr-total{
+    padding-top:12px;
+    margin-top:2px;
+    border-top:1px solid rgba(167,139,250,0.35);
+    border-bottom:none;
+  }
+  .cr-total .cr-key{
+    color:var(--text-0);
+    font-weight:800;
+    font-size:13px;
+  }
+  .cr-total .cr-val{
+    color:var(--plan-accent);
+    font-size:18px;
+    font-weight:800;
+  }
+
+  .calc-note{
+    font-size:10.5px;
+    color:var(--text-2);
+    line-height:1.6;
+    letter-spacing:-0.005em;
+    text-align:center;
+    margin-top:8px;
+  }
+
   @media (min-width:481px){
     .page{ box-shadow:0 0 60px rgba(0,0,0,0.6); }
   }
@@ -1053,17 +1313,17 @@
 
   <!-- Top bar -->
   <div class="topbar">
-    <div class="brand">GALAXY UNPACKED 2026</div>
+    <div class="brand">갤럭시 언팩 2026</div>
     <div class="carrier">LG유플러스 공식파트너</div>
   </div>
 
   <!-- Hero -->
   <section class="hero">
-    <span class="eyebrow">Reservation Opens Soon</span>
+    <span class="eyebrow">사전예약 오픈 예정</span>
 
     <div class="hero-product">
       <div class="ph-icon">📱</div>
-      <div class="ph-label">PRODUCT IMAGE PLACEHOLDER</div>
+      <div class="ph-label">제품 이미지 자리</div>
       <div class="ph-sub">Galaxy Z Fold8 공식 이미지 삽입 영역</div>
     </div>
 
@@ -1182,6 +1442,104 @@
     </div>
 
     <p class="benefit-note">* 상기 혜택은 사정에 따라 변경될 수 있으며, 자세한 내용은 매장에 문의 바랍니다.</p>
+  </section>
+
+  <!-- 월 예상 청구요금 계산기 -->
+  <section class="calc-section">
+    <div class="section-head">
+      <span class="tag">Bill Estimator</span>
+      <h2>월 예상 청구요금 계산기</h2>
+      <p>Galaxy Z Fold8 구매 시 월 부담을 미리 확인해보세요</p>
+    </div>
+
+    <div class="calc-card">
+      <!-- 방식 선택 탭 -->
+      <div class="calc-tabs" role="tablist" aria-label="구매 방식 선택">
+        <button type="button" class="calc-tab is-active" data-method="subsidy" role="tab" aria-selected="true">공시지원금 받기</button>
+        <button type="button" class="calc-tab" data-method="discount" role="tab" aria-selected="false">선택약정 25% 받기</button>
+      </div>
+
+      <!-- 할부 개월수 토글 -->
+      <div class="calc-months">
+        <span class="calc-months-label">할부 개월수</span>
+        <div class="calc-months-toggle" role="tablist" aria-label="할부 개월수 선택">
+          <button type="button" class="calc-month-btn is-active" data-months="24" role="tab" aria-selected="true">24개월</button>
+          <button type="button" class="calc-month-btn" data-months="36" role="tab" aria-selected="false">36개월</button>
+        </div>
+      </div>
+
+      <!-- 입력란 -->
+      <div class="calc-inputs">
+        <div class="calc-input-row">
+          <span class="cir-label">기기 선택</span>
+          <div class="cir-input-wrap">
+            <select class="cir-select" id="calcDevice" aria-label="기기 선택"></select>
+          </div>
+        </div>
+
+        <div class="calc-input-row">
+          <span class="cir-label">출고가 <span class="cir-hint">(자동 설정)</span></span>
+          <div class="cir-input-wrap">
+            <input type="text" class="cir-input" id="calcPrice" readonly aria-label="출고가" tabindex="-1">
+            <span class="cir-unit">원</span>
+          </div>
+        </div>
+
+        <!-- 지원금 미확정 안내 (공시지원금 방식에서만 노출) -->
+        <div class="calc-subsidy-notice" id="subsidyNotice">
+          <span class="csn-icon" aria-hidden="true">ⓘ</span>
+          지원금 미확정 — 결정되는 대로 업데이트 예정
+        </div>
+
+        <div class="calc-input-row" id="subsidyRow1">
+          <span class="cir-label">이통사 공시지원금</span>
+          <div class="cir-input-wrap">
+            <input type="text" inputmode="numeric" class="cir-input" id="calcCarrierSubsidy" value="0" placeholder="[미정 - 추후 입력]" aria-label="이통사 공시지원금">
+            <span class="cir-unit">원</span>
+          </div>
+        </div>
+
+        <div class="calc-input-row" id="subsidyRow2">
+          <span class="cir-label">대리점 추가지원금 (최대 15%)</span>
+          <div class="cir-input-wrap">
+            <input type="text" inputmode="numeric" class="cir-input" id="calcDealerSubsidy" value="0" placeholder="[미정 - 추후 입력]" aria-label="대리점 추가지원금">
+            <span class="cir-unit">원</span>
+          </div>
+        </div>
+
+        <div class="calc-input-row">
+          <span class="cir-label">요금제 선택</span>
+          <div class="cir-input-wrap">
+            <select class="cir-select" id="calcPlan" aria-label="요금제 선택"></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결과 -->
+      <div class="calc-result" aria-live="polite">
+        <div class="cr-notice" id="calcTempNotice">
+          <span class="crn-icon" aria-hidden="true">⚠</span>
+          지원금 확정 전 임시 계산
+        </div>
+        <div class="cr-row">
+          <span class="cr-key">월 기기값 <span class="cr-hint">(<span id="calcMonthsLabel">24</span>개월 할부)</span></span>
+          <span class="cr-val" id="calcDeviceMonthly">—</span>
+        </div>
+        <div class="cr-row">
+          <span class="cr-key">월 통신 요금 <span class="cr-hint" id="calcPlanHint">(정가)</span></span>
+          <span class="cr-val" id="calcPlanMonthly">—</span>
+        </div>
+        <div class="cr-row cr-total">
+          <span class="cr-key">월 예상 청구요금</span>
+          <span class="cr-val" id="calcTotal">—</span>
+        </div>
+      </div>
+
+      <p class="calc-note">
+        ※ 36개월 선택 시 월 부담은 줄지만 약정기간이 길어집니다.<br>
+        ※ 실제 청구금액은 부가세 · 결합할인 · 카드 청구할인 등에 따라 달라질 수 있습니다.
+      </p>
+    </div>
   </section>
 
   <!-- CTA -->
@@ -1376,6 +1734,175 @@
     { id:"data-750mb", category:"data-basic", name:"데이터플랜750MB",  price:"29,000원", data:"750MB + 다 쓰면 최대 400Kbps", extra:"음성통화 125분, 문자 150건" },
     { id:"data-300mb", category:"data-basic", name:"데이터플랜300MB",  price:"28,000원", data:"300MB + 다 쓰면 최대 400Kbps", extra:"음성통화 125분, 문자 150건" }
   ];
+
+  /* ============================================================
+     월 예상 청구요금 계산기
+     - 방식 A(공시지원금): 월 기기값 = (출고가 - 이통사지원금 - 대리점지원금) / 개월수
+     - 방식 B(선택약정): 월 기기값 = 출고가 / 개월수, 요금제 25% 할인
+     ============================================================ */
+
+  /* -----------------------------------------------------------
+     기기별 출고가 데이터 (실제 확정된 소비자가)
+     ----------------------------------------------------------- */
+  var devices = [
+    { id: "flip8",      name: "Galaxy Z Flip8",       price: 1683000 },
+    { id: "fold8",      name: "Galaxy Z Fold8",       price: 2278000 },
+    { id: "fold8ultra", name: "Galaxy Z Fold8 Ultra", price: 2577000 }
+  ];
+
+  /* -----------------------------------------------------------
+     TODO: 이통사/대리점 지원금이 확정되면 아래 두 상수 값을
+     실제 숫자로 교체하세요. (예: DEFAULT_CARRIER_SUBSIDY = 300000)
+     교체 후 HTML의 input value="0" 은 그대로 두어도, 아래
+     상수가 자동 반영됩니다.
+     ----------------------------------------------------------- */
+  var DEFAULT_CARRIER_SUBSIDY = 0;  // 이통사 공시지원금 (미확정)
+  var DEFAULT_DEALER_SUBSIDY  = 0;  // 대리점 추가지원금  (미확정)
+
+  (function(){
+    var deviceEl  = document.getElementById('calcDevice');
+    var priceEl   = document.getElementById('calcPrice');
+    var carrierEl = document.getElementById('calcCarrierSubsidy');
+    var dealerEl  = document.getElementById('calcDealerSubsidy');
+    var planEl    = document.getElementById('calcPlan');
+    if (!priceEl || !planEl || !deviceEl) return;
+
+    var subsidyRow1   = document.getElementById('subsidyRow1');
+    var subsidyRow2   = document.getElementById('subsidyRow2');
+    var subsidyNotice = document.getElementById('subsidyNotice');
+    var tempNotice    = document.getElementById('calcTempNotice');
+    var deviceOut     = document.getElementById('calcDeviceMonthly');
+    var planOut       = document.getElementById('calcPlanMonthly');
+    var totalOut      = document.getElementById('calcTotal');
+    var monthsLabel   = document.getElementById('calcMonthsLabel');
+    var planHintEl    = document.getElementById('calcPlanHint');
+
+    var currentMethod = 'subsidy'; // 'subsidy' | 'discount'
+    var currentMonths = 24;
+
+    function parseNum(str){ return parseInt(String(str).replace(/[^0-9]/g,''), 10) || 0; }
+    function formatKrw(n){ return n.toLocaleString('ko-KR') + '원'; }
+
+    // 기기 드롭다운 채우기 (기본: Galaxy Z Fold8)
+    devices.forEach(function(d){
+      var opt = document.createElement('option');
+      opt.value = d.id;
+      opt.textContent = d.name + ' · ' + d.price.toLocaleString('ko-KR') + '원';
+      opt.setAttribute('data-price', d.price);
+      deviceEl.appendChild(opt);
+    });
+    deviceEl.value = 'fold8';
+
+    // 요금제 드롭다운 채우기 (기존 plans 배열 재사용)
+    if (typeof plans !== 'undefined' && Array.isArray(plans)){
+      plans.forEach(function(p){
+        var opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name + ' · ' + p.price;
+        opt.setAttribute('data-price', String(p.price).replace(/[^0-9]/g,''));
+        planEl.appendChild(opt);
+      });
+      planEl.value = 'data-max';  // 기본: 데이터플랜MAX (Z Fold8 권장)
+    }
+
+    // 지원금 초기값 주입 (TODO 상수 반영)
+    carrierEl.value = DEFAULT_CARRIER_SUBSIDY > 0
+      ? DEFAULT_CARRIER_SUBSIDY.toLocaleString('ko-KR') : '0';
+    dealerEl.value = DEFAULT_DEALER_SUBSIDY > 0
+      ? DEFAULT_DEALER_SUBSIDY.toLocaleString('ko-KR') : '0';
+
+    // 기기 변경 → 출고가 자동 반영
+    function syncDevicePrice(){
+      var opt = deviceEl.options[deviceEl.selectedIndex];
+      var p = parseNum(opt && opt.getAttribute('data-price'));
+      priceEl.value = p.toLocaleString('ko-KR');
+    }
+    syncDevicePrice();
+    deviceEl.addEventListener('change', function(){
+      syncDevicePrice();
+      recalc();
+    });
+
+    // 지원금 입력란만 콤마 포맷 + 실시간 재계산 (출고가는 readonly)
+    [carrierEl, dealerEl].forEach(function(el){
+      el.addEventListener('input', function(){
+        var digits = el.value.replace(/[^0-9]/g,'');
+        el.value = digits ? parseInt(digits, 10).toLocaleString('ko-KR') : '';
+        try { el.setSelectionRange(el.value.length, el.value.length); } catch(_){}
+        recalc();
+      });
+    });
+
+    planEl.addEventListener('change', recalc);
+
+    // 방식 탭 (공시지원금 / 선택약정)
+    document.querySelectorAll('.calc-tab').forEach(function(tab){
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.calc-tab').forEach(function(t){
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected','false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected','true');
+        currentMethod = tab.getAttribute('data-method');
+        var showSubsidy = currentMethod === 'subsidy';
+        subsidyRow1.style.display = showSubsidy ? '' : 'none';
+        subsidyRow2.style.display = showSubsidy ? '' : 'none';
+        subsidyNotice.classList.toggle('is-hidden', !showSubsidy);
+        recalc();
+      });
+    });
+
+    // 개월수 토글 (24 / 36)
+    document.querySelectorAll('.calc-month-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.calc-month-btn').forEach(function(b){
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected','false');
+        });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected','true');
+        currentMonths = parseInt(btn.getAttribute('data-months'), 10);
+        monthsLabel.textContent = currentMonths;
+        recalc();
+      });
+    });
+
+    function recalc(){
+      var price   = parseNum(priceEl.value);
+      var carrier = parseNum(carrierEl.value);
+      var dealer  = parseNum(dealerEl.value);
+      var selectedOpt = planEl.options[planEl.selectedIndex];
+      var planPrice = parseNum(selectedOpt && selectedOpt.getAttribute('data-price'));
+
+      var deviceMonthly, planMonthly;
+
+      if (currentMethod === 'subsidy'){
+        // 공시지원금 방식: 지원금 차감 후 할부 (지원금 0이어도 정상 동작)
+        var realPrice = Math.max(0, price - carrier - dealer);
+        deviceMonthly = Math.round(realPrice / currentMonths);
+        planMonthly = planPrice;
+        planHintEl.textContent = '(정가)';
+        // 임시 계산 안내: 공시지원금 방식 + 두 지원금 합계 0일 때만 노출
+        var isTemp = (carrier + dealer) === 0;
+        tempNotice.classList.toggle('is-hidden', !isTemp);
+      } else {
+        // 선택약정 25% 방식: 지원금 무관, 요금 25% 할인
+        deviceMonthly = Math.round(price / currentMonths);
+        planMonthly = Math.round(planPrice * 0.75);
+        planHintEl.textContent = '(약정할인 25%)';
+        tempNotice.classList.add('is-hidden'); // 선택약정에서는 임시 계산 안내 불필요
+      }
+
+      var total = deviceMonthly + planMonthly;
+      deviceOut.textContent = formatKrw(deviceMonthly);
+      planOut.textContent = formatKrw(planMonthly);
+      totalOut.textContent = formatKrw(total);
+    }
+
+    // 초기 계산
+    recalc();
+  })();
 
   /* ============================================================
      PLAN RENDERING (필터 칩 + 아코디언)
