@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
-<!-- 히어로 타이틀은 이미지(assets/hero-title.png)로 교체됨 — 별도 웹폰트 불필요 -->
+<!-- 히어로 타이틀은 이미지(assets/hero-title.jpg)로 교체됨 — 별도 웹폰트 불필요 -->
 <style>
 
   :root{
@@ -1647,6 +1647,208 @@
     margin-top:8px;
   }
 
+  /* ═══════════════════════════════════════
+     이미지 · 안내 캐러셀 (히어로 내부)
+     ═══════════════════════════════════════ */
+  .carousel{
+    position:relative;
+    width:100%;
+  }
+  /* 히어로 컨텍스트: 기존 .hero-product 자리 크기·톤 계승 */
+  .hero-carousel{
+    position:relative;
+    z-index:1;
+    margin:0 auto 24px;
+    max-width:340px;
+  }
+  .hero-carousel .carousel-viewport{
+    border-radius:22px;
+    box-shadow:
+      0 30px 60px -20px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .carousel-viewport{
+    overflow:hidden;
+    border-radius:18px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    box-shadow:0 12px 32px -12px rgba(0,0,0,0.5);
+  }
+  .carousel-track{
+    display:flex;
+    transition:transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change:transform;
+    touch-action:pan-y;
+  }
+  .carousel-track.is-dragging{
+    transition:none;
+    cursor:grabbing;
+  }
+  .carousel-slide{
+    flex:0 0 100%;
+    min-width:0;
+    position:relative;
+    aspect-ratio:16 / 10;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    user-select:none;
+    -webkit-user-drag:none;
+  }
+  /* 카드뉴스 슬라이드 (이미지 카드) */
+  .carousel-slide.type-card{
+    /* 첨부 이미지들의 배경(밝은 회색 그라데이션)에 맞춘 톤 */
+    background:linear-gradient(180deg, #ececef 0%, #dcdce0 100%);
+  }
+  .carousel-slide.type-card img{
+    width:100%;
+    height:100%;
+    object-fit:contain;   /* 제품 이미지는 잘림 없이 원본 비율 유지 */
+    object-position:center;
+    display:block;
+    -webkit-user-drag:none;
+    pointer-events:none;
+  }
+  /* 이미지 로드 실패 시 대체 UI */
+  .carousel-slide.is-placeholder{
+    background:linear-gradient(160deg, #1a1a20 0%, #0f0f14 100%);
+  }
+  .carousel-placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:20px;
+    color:var(--text-2);
+    text-align:center;
+    width:100%;
+    height:100%;
+  }
+  .carousel-placeholder .cp-icon{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.05);
+    border:1.5px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    margin-bottom:6px;
+  }
+  .carousel-placeholder .cp-device{
+    font-size:14px;
+    font-weight:800;
+    color:var(--text-1);
+    letter-spacing:-0.015em;
+  }
+  .carousel-placeholder .cp-hint{
+    font-size:11px;
+    color:var(--text-2);
+    letter-spacing:0.02em;
+  }
+  /* 선택적 하단 오버레이 텍스트 (카드뉴스 캡션) */
+  .carousel-overlay{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding:20px 18px 16px;
+    background:linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.65) 100%);
+    color:#fff;
+    text-align:left;
+    pointer-events:none;
+  }
+  .co-title{
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:-0.015em;
+    line-height:1.3;
+    margin-bottom:2px;
+    text-shadow:0 1px 6px rgba(0,0,0,0.4);
+  }
+  .co-subtitle{
+    font-size:11.5px;
+    font-weight:500;
+    color:rgba(255,255,255,0.85);
+    letter-spacing:-0.005em;
+    text-shadow:0 1px 6px rgba(0,0,0,0.4);
+  }
+
+  /* Arrow buttons */
+  .carousel-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.14);
+    color:#fff;
+    font-family:inherit;
+    font-size:22px;
+    font-weight:600;
+    line-height:1;
+    cursor:pointer;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding-bottom:2px;
+    transition:background 0.15s ease, transform 0.15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .carousel-arrow:hover{ background:rgba(0,0,0,0.75); }
+  .carousel-arrow:active{ transform:translateY(-50%) scale(0.94); }
+  .carousel-arrow:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  .carousel-arrow-prev{ left:8px; }
+  .carousel-arrow-next{ right:8px; }
+  .carousel-arrow[disabled]{
+    opacity:0.35;
+    cursor:not-allowed;
+  }
+
+  /* Dots indicator */
+  .carousel-dots{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    margin-top:14px;
+  }
+  .carousel-dot{
+    width:6px;
+    height:6px;
+    border-radius:100px;
+    background:rgba(255,255,255,0.22);
+    border:none;
+    padding:0;
+    cursor:pointer;
+    transition:background 0.2s ease, width 0.3s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .carousel-dot:hover{ background:rgba(255,255,255,0.4); }
+  .carousel-dot.is-active{
+    width:22px;
+    background:var(--accent);
+  }
+  .carousel-dot:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  /* 모션 감소 유저 배려 */
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{ transition:none; }
+    .carousel-dot{ transition:none; }
+  }
+
   @media (min-width:481px){
     .page{ box-shadow:0 0 60px rgba(0,0,0,0.6); }
   }
@@ -1665,14 +1867,19 @@
   <section class="hero">
     <span class="eyebrow">사전예약 오픈 예정</span>
 
-    <div class="hero-product">
-      <div class="ph-icon">📱</div>
-      <div class="ph-label">제품 이미지 자리</div>
-      <div class="ph-sub">Galaxy Z Fold8 공식 이미지 삽입 영역</div>
+    <!-- 제품 이미지 자리 → 슬라이딩 캐러셀로 교체 -->
+    <div class="carousel hero-carousel" id="mainCarousel"
+         role="region" aria-roledescription="carousel" aria-label="제품 및 사전예약 안내">
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carouselTrack" aria-live="polite"></div>
+      </div>
+      <button type="button" class="carousel-arrow carousel-arrow-prev" id="carouselPrev" aria-label="이전 슬라이드">‹</button>
+      <button type="button" class="carousel-arrow carousel-arrow-next" id="carouselNext" aria-label="다음 슬라이드">›</button>
+      <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="슬라이드 이동"></div>
     </div>
 
     <h1 class="hero-title-heading">
-      <img src="assets/hero-title.png"
+      <img src="assets/hero-title.jpg"
            alt="Galaxy Z Flip · Z Fold 8 Series"
            class="hero-title-img">
     </h1>
@@ -2077,6 +2284,204 @@
 
   // 사전예약 CTA 버튼은 href로 직접 연결됨 (assets/… 또는 구글 폼 등)
   // preventDefault 하지 않고 <a href="..." target="_blank"> 기본 동작을 사용
+
+  /* ============================================================
+     이미지 · 안내 캐러셀
+     - 배열(carouselSlides)에 항목 추가하면 자동 렌더됨
+     - 지원 타입: 'image' (제품컷), 'content' (텍스트+CTA)
+     - 새 타입 추가는 renderSlide()의 switch 분기 확장
+     ============================================================ */
+  /* -----------------------------------------------------------
+     제품 캐러셀 슬라이드 배열 (카드뉴스형)
+     - 이미지 파일 저장 위치: assets/products/
+     - 파일이 없으면 자동으로 "이미지 준비 중" 대체 UI 표시
+     - 새 카드 추가는 { src, alt } 한 줄만 append
+     ----------------------------------------------------------- */
+  var carouselSlides = [
+    {
+      src: 'assets/products/fold8-ultra.jpg',
+      alt: 'Galaxy Z Fold8 Ultra',
+      device: 'Galaxy Z Fold8 Ultra'
+    },
+    {
+      src: 'assets/products/fold8.jpg',
+      alt: 'Galaxy Z Fold8',
+      device: 'Galaxy Z Fold8'
+    },
+    {
+      src: 'assets/products/flip8.jpg',
+      alt: 'Galaxy Z Flip8',
+      device: 'Galaxy Z Flip8'
+    }
+  ];
+
+  (function(){
+    var track = document.getElementById('carouselTrack');
+    var dotsBox = document.getElementById('carouselDots');
+    var btnPrev = document.getElementById('carouselPrev');
+    var btnNext = document.getElementById('carouselNext');
+    var root = document.getElementById('mainCarousel');
+    if (!track || !dotsBox || !btnPrev || !btnNext) return;
+
+    var AUTOPLAY_MS = 5000;
+    var SWIPE_THRESHOLD = 40; // 최소 스와이프 거리 (px)
+    var currentIndex = 0;
+    var autoTimer = null;
+    var isPaused = false;
+    var startX = 0, currentDeltaX = 0, isDragging = false, pointerId = null;
+
+    // 슬라이드 렌더 (배열 → DOM) — 카드뉴스 스타일 (이미지 + 로드 실패 시 대체 UI)
+    function renderSlide(slide, idx){
+      var el = document.createElement('div');
+      el.className = 'carousel-slide type-card';
+      el.setAttribute('role', 'group');
+      el.setAttribute('aria-roledescription', 'slide');
+      el.setAttribute('aria-label', (idx+1) + ' / ' + carouselSlides.length);
+
+      var img = document.createElement('img');
+      img.src = slide.src;
+      img.alt = slide.alt || '';
+      // 슬라이드가 소수(3~5장)라 전부 eager 로딩 → 오프뷰포트 슬라이드도 onerror 정상 트리거
+      img.loading = 'eager';
+      // 이미지 로드 실패 시 자동 대체 UI (파일 저장 전 우아한 폴백)
+      img.onerror = function(){
+        el.classList.add('is-placeholder');
+        el.innerHTML =
+          '<div class="carousel-placeholder">' +
+            '<div class="cp-icon" aria-hidden="true">📦</div>' +
+            '<div class="cp-device">' + (slide.device || slide.alt || '') + '</div>' +
+            '<div class="cp-hint">이미지 준비 중</div>' +
+          '</div>';
+      };
+      el.appendChild(img);
+
+      // 선택적 오버레이 (하단 다크 그라디언트 + 텍스트)
+      if (slide.overlay && (slide.overlay.title || slide.overlay.subtitle)){
+        var ov = document.createElement('div');
+        ov.className = 'carousel-overlay';
+        var html = '';
+        if (slide.overlay.title)    html += '<div class="co-title">' + slide.overlay.title + '</div>';
+        if (slide.overlay.subtitle) html += '<div class="co-subtitle">' + slide.overlay.subtitle + '</div>';
+        ov.innerHTML = html;
+        el.appendChild(ov);
+      }
+      return el;
+    }
+
+    function renderAll(){
+      track.innerHTML = '';
+      dotsBox.innerHTML = '';
+      carouselSlides.forEach(function(s, i){
+        track.appendChild(renderSlide(s, i));
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'carousel-dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', (i+1) + '번 슬라이드로 이동');
+        dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        dot.addEventListener('click', function(){
+          goTo(i);
+          pauseAutoplay();
+        });
+        dotsBox.appendChild(dot);
+      });
+      // 슬라이드 1장이면 컨트롤 UI 숨김 (넘길 게 없음)
+      var singleSlide = carouselSlides.length <= 1;
+      btnPrev.hidden = singleSlide;
+      btnNext.hidden = singleSlide;
+      dotsBox.hidden = singleSlide;
+    }
+
+    function updateUI(){
+      var offset = -currentIndex * 100;
+      track.style.transform = 'translateX(' + offset + '%)';
+      [...dotsBox.children].forEach(function(d, i){
+        var active = i === currentIndex;
+        d.classList.toggle('is-active', active);
+        d.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    function goTo(idx){
+      var n = carouselSlides.length;
+      currentIndex = ((idx % n) + n) % n; // 순환
+      updateUI();
+    }
+
+    function next(){ goTo(currentIndex + 1); }
+    function prev(){ goTo(currentIndex - 1); }
+
+    function startAutoplay(){
+      stopAutoplay();
+      if (isPaused || carouselSlides.length <= 1) return;
+      autoTimer = setInterval(next, AUTOPLAY_MS);
+    }
+    function stopAutoplay(){
+      if (autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+    }
+    function pauseAutoplay(){
+      isPaused = true;
+      stopAutoplay();
+    }
+
+    // 화살표 버튼
+    btnPrev.addEventListener('click', function(){ prev(); pauseAutoplay(); });
+    btnNext.addEventListener('click', function(){ next(); pauseAutoplay(); });
+
+    // 키보드 접근성 (좌/우 화살표)
+    root.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft'){ prev(); pauseAutoplay(); }
+      else if (e.key === 'ArrowRight'){ next(); pauseAutoplay(); }
+    });
+
+    // 포인터(터치/마우스) 스와이프
+    track.addEventListener('pointerdown', function(e){
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      isDragging = true;
+      pointerId = e.pointerId;
+      startX = e.clientX;
+      currentDeltaX = 0;
+      track.classList.add('is-dragging');
+      pauseAutoplay();
+      try { track.setPointerCapture(pointerId); } catch(_){}
+    });
+    track.addEventListener('pointermove', function(e){
+      if (!isDragging || e.pointerId !== pointerId) return;
+      currentDeltaX = e.clientX - startX;
+      var trackWidth = track.offsetWidth;
+      var pctOffset = (currentDeltaX / trackWidth) * 100;
+      var base = -currentIndex * 100;
+      track.style.transform = 'translateX(' + (base + pctOffset) + '%)';
+    });
+    function endDrag(e){
+      if (!isDragging || (e && e.pointerId !== pointerId)) return;
+      isDragging = false;
+      track.classList.remove('is-dragging');
+      try { track.releasePointerCapture(pointerId); } catch(_){}
+      if (Math.abs(currentDeltaX) > SWIPE_THRESHOLD){
+        if (currentDeltaX < 0) next(); else prev();
+      } else {
+        updateUI(); // 원위치 스냅
+      }
+      currentDeltaX = 0;
+    }
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+    track.addEventListener('pointerleave', function(e){
+      if (isDragging) endDrag(e);
+    });
+
+    // 탭 비활성 시 자동재생 중지 (배터리 절약)
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) stopAutoplay();
+      else if (!isPaused) startAutoplay();
+    });
+
+    // 초기 렌더 + 자동재생 시작
+    renderAll();
+    updateUI();
+    startAutoplay();
+  })();
 
   /* ============================================================
      PLAN DATA — LG U+ 요금제 (2026-06 심플리 2.0 기준)
