@@ -1648,70 +1648,84 @@
   }
 
   /* ═══════════════════════════════════════
-     이미지 · 안내 캐러셀 (히어로 내부)
+     이미지 캐러셀 — 가운데 카드 강조형 peek 스타일
+     (양옆 카드는 살짝 작고 흐리게 노출)
      ═══════════════════════════════════════ */
   .carousel{
     position:relative;
     width:100%;
   }
-  /* 히어로 컨텍스트: 기존 .hero-product 자리 크기·톤 계승 */
+  /* 히어로 컨텍스트: 부모 섹션 폭에 꽉 차게 확장 (peek 효과 극대화) */
   .hero-carousel{
     position:relative;
     z-index:1;
-    margin:0 auto 24px;
-    max-width:340px;
+    width:calc(100% + 40px);
+    max-width:800px;
+    margin:0 -20px 24px;
   }
-  .hero-carousel .carousel-viewport{
-    border-radius:22px;
-    box-shadow:
-      0 30px 60px -20px rgba(0,0,0,0.7),
-      inset 0 1px 0 rgba(255,255,255,0.05);
-  }
+
   .carousel-viewport{
+    width:100%;
     overflow:hidden;
-    border-radius:18px;
-    background:var(--panel);
-    border:1px solid var(--line);
-    box-shadow:0 12px 32px -12px rgba(0,0,0,0.5);
+    position:relative;
   }
   .carousel-track{
     display:flex;
-    transition:transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition:transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     will-change:transform;
+    /* scale 0.9 카드가 그림자·outline까지 잘리지 않게 세로 여백 */
+    padding:14px 0 18px;
     touch-action:pan-y;
   }
   .carousel-track.is-dragging{
     transition:none;
     cursor:grabbing;
   }
-  .carousel-slide{
-    flex:0 0 100%;
+
+  .carousel-card{
+    flex:0 0 80%;
     min-width:0;
-    position:relative;
+    margin:0 10px;
+    border-radius:20px;
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    /* 카드 전환은 track 슬라이드(translateX)로 이미 부드럽게 표현됨.
+       scale/opacity는 스냅으로 표현 — CSS transition이 프리뷰 환경에서
+       inline style을 잠그는 문제 회피. border/shadow만 부드럽게 전환. */
+    transition:border-color 0.4s ease, box-shadow 0.4s ease;
     aspect-ratio:16 / 10;
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
+    cursor:pointer;
     user-select:none;
     -webkit-user-drag:none;
+    position:relative;
+    transform-origin:center;
   }
-  /* 카드뉴스 슬라이드 (이미지 카드) */
-  .carousel-slide.type-card{
-    /* 첨부 이미지들의 배경(밝은 회색 그라데이션)에 맞춘 톤 */
-    background:linear-gradient(180deg, #ececef 0%, #dcdce0 100%);
+  .carousel-card.is-active{
+    /* transform/opacity 는 JS에서 inline 주입 — border/shadow만 CSS 담당 */
+    border-color:var(--accent);
+    box-shadow:0 10px 30px rgba(165, 180, 212, 0.15);
+    cursor:default;
   }
-  .carousel-slide.type-card img{
+  /* 이미지 카드 (제품컷) */
+  .carousel-card img{
     width:100%;
     height:100%;
-    object-fit:contain;   /* 제품 이미지는 잘림 없이 원본 비율 유지 */
+    object-fit:contain;
     object-position:center;
     display:block;
     -webkit-user-drag:none;
     pointer-events:none;
   }
+  /* 이미지 파일 있는 카드는 라이트 그라데이션 배경 (원본 이미지 배경과 매칭) */
+  .carousel-card:not(.is-placeholder){
+    background:linear-gradient(180deg, #ececef 0%, #dcdce0 100%);
+  }
   /* 이미지 로드 실패 시 대체 UI */
-  .carousel-slide.is-placeholder{
+  .carousel-card.is-placeholder{
     background:linear-gradient(160deg, #1a1a20 0%, #0f0f14 100%);
   }
   .carousel-placeholder{
@@ -2330,10 +2344,10 @@
     var isPaused = false;
     var startX = 0, currentDeltaX = 0, isDragging = false, pointerId = null;
 
-    // 슬라이드 렌더 (배열 → DOM) — 카드뉴스 스타일 (이미지 + 로드 실패 시 대체 UI)
+    // 카드 렌더 (배열 → DOM) — peek 스타일 (.carousel-card 사용)
     function renderSlide(slide, idx){
       var el = document.createElement('div');
-      el.className = 'carousel-slide type-card';
+      el.className = 'carousel-card';
       el.setAttribute('role', 'group');
       el.setAttribute('aria-roledescription', 'slide');
       el.setAttribute('aria-label', (idx+1) + ' / ' + carouselSlides.length);
@@ -2341,9 +2355,7 @@
       var img = document.createElement('img');
       img.src = slide.src;
       img.alt = slide.alt || '';
-      // 슬라이드가 소수(3~5장)라 전부 eager 로딩 → 오프뷰포트 슬라이드도 onerror 정상 트리거
-      img.loading = 'eager';
-      // 이미지 로드 실패 시 자동 대체 UI (파일 저장 전 우아한 폴백)
+      img.loading = 'eager'; // 3~5장이라 오프뷰포트도 프리로드 → onerror 정상 트리거
       img.onerror = function(){
         el.classList.add('is-placeholder');
         el.innerHTML =
@@ -2355,16 +2367,13 @@
       };
       el.appendChild(img);
 
-      // 선택적 오버레이 (하단 다크 그라디언트 + 텍스트)
-      if (slide.overlay && (slide.overlay.title || slide.overlay.subtitle)){
-        var ov = document.createElement('div');
-        ov.className = 'carousel-overlay';
-        var html = '';
-        if (slide.overlay.title)    html += '<div class="co-title">' + slide.overlay.title + '</div>';
-        if (slide.overlay.subtitle) html += '<div class="co-subtitle">' + slide.overlay.subtitle + '</div>';
-        ov.innerHTML = html;
-        el.appendChild(ov);
-      }
+      // 비활성 카드 클릭 시 활성화 (peek 카드도 클릭으로 중앙 이동)
+      el.addEventListener('click', function(){
+        if (idx !== currentIndex){
+          goTo(idx);
+          pauseAutoplay();
+        }
+      });
       return el;
     }
 
@@ -2385,16 +2394,45 @@
         });
         dotsBox.appendChild(dot);
       });
-      // 슬라이드 1장이면 컨트롤 UI 숨김 (넘길 게 없음)
       var singleSlide = carouselSlides.length <= 1;
       btnPrev.hidden = singleSlide;
       btnNext.hidden = singleSlide;
       dotsBox.hidden = singleSlide;
     }
 
-    function updateUI(){
-      var offset = -currentIndex * 100;
-      track.style.transform = 'translateX(' + offset + '%)';
+    /* Peek 캐러셀 중앙 정렬 계산
+       - 카드는 각각 뷰포트 폭의 80%, 좌우 10px margin (총 gap 20px)
+       - N번째 카드가 뷰포트 중앙에 오려면 track을 pixel 단위로 이동
+       - viewport = getBoundingClientRect() 실측 (반응형·resize 대응) */
+    function updateUI(instant){
+      var viewport = track.parentElement; // .carousel-viewport
+      var vw = viewport.getBoundingClientRect().width;
+      var cardW = 0.8 * vw;           // 80%
+      var gap = 20;                    // 좌우 각 10px
+      var startPad = 10;               // 첫 카드의 좌측 margin
+      // 카드 N의 좌측 좌표: startPad + N * (cardW + gap)
+      // 카드 N을 뷰포트 중앙에 두려면 translateX = (vw - cardW)/2 - (카드 N 좌측 좌표)
+      var translateX = (vw - cardW)/2 - startPad - currentIndex * (cardW + gap);
+
+      if (instant){
+        // 리사이즈 등에서는 애니메이션 없이 즉시 스냅
+        var prevTransition = track.style.transition;
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(' + translateX + 'px)';
+        // 강제 reflow 후 transition 복구
+        void track.offsetWidth;
+        track.style.transition = prevTransition;
+      } else {
+        track.style.transform = 'translateX(' + translateX + 'px)';
+      }
+
+      // 활성 카드 표시: 인라인 스타일 직접 주입 (transition은 CSS가 담당)
+      [...track.children].forEach(function(card, i){
+        var active = i === currentIndex;
+        card.classList.toggle('is-active', active);
+        card.style.setProperty('transform', active ? 'scale(1)' : 'scale(0.9)', 'important');
+        card.style.setProperty('opacity',   active ? '1' : '0.5',            'important');
+      });
       [...dotsBox.children].forEach(function(d, i){
         var active = i === currentIndex;
         d.classList.toggle('is-active', active);
@@ -2404,7 +2442,7 @@
 
     function goTo(idx){
       var n = carouselSlides.length;
-      currentIndex = ((idx % n) + n) % n; // 순환
+      currentIndex = ((idx % n) + n) % n; // loop 순환
       updateUI();
     }
 
@@ -2428,13 +2466,19 @@
     btnPrev.addEventListener('click', function(){ prev(); pauseAutoplay(); });
     btnNext.addEventListener('click', function(){ next(); pauseAutoplay(); });
 
-    // 키보드 접근성 (좌/우 화살표)
+    // 키보드: 캐러셀 자체 포커스 + 전역 ← / → (input 등 텍스트 필드 포커스 시엔 스킵)
     root.addEventListener('keydown', function(e){
       if (e.key === 'ArrowLeft'){ prev(); pauseAutoplay(); }
       else if (e.key === 'ArrowRight'){ next(); pauseAutoplay(); }
     });
+    document.addEventListener('keydown', function(e){
+      var tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return; // 폼 입력 중이면 무시
+      if (e.key === 'ArrowLeft'){ prev(); pauseAutoplay(); }
+      else if (e.key === 'ArrowRight'){ next(); pauseAutoplay(); }
+    });
 
-    // 포인터(터치/마우스) 스와이프
+    // 포인터(터치/마우스) 스와이프 — 픽셀 단위로 track 이동
     track.addEventListener('pointerdown', function(e){
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       isDragging = true;
@@ -2448,10 +2492,14 @@
     track.addEventListener('pointermove', function(e){
       if (!isDragging || e.pointerId !== pointerId) return;
       currentDeltaX = e.clientX - startX;
-      var trackWidth = track.offsetWidth;
-      var pctOffset = (currentDeltaX / trackWidth) * 100;
-      var base = -currentIndex * 100;
-      track.style.transform = 'translateX(' + (base + pctOffset) + '%)';
+      // 현재 위치 + drag delta (픽셀 기반)
+      var viewport = track.parentElement;
+      var vw = viewport.getBoundingClientRect().width;
+      var cardW = 0.8 * vw;
+      var gap = 20;
+      var startPad = 10;
+      var baseTx = (vw - cardW)/2 - startPad - currentIndex * (cardW + gap);
+      track.style.transform = 'translateX(' + (baseTx + currentDeltaX) + 'px)';
     });
     function endDrag(e){
       if (!isDragging || (e && e.pointerId !== pointerId)) return;
@@ -2461,7 +2509,7 @@
       if (Math.abs(currentDeltaX) > SWIPE_THRESHOLD){
         if (currentDeltaX < 0) next(); else prev();
       } else {
-        updateUI(); // 원위치 스냅
+        updateUI();
       }
       currentDeltaX = 0;
     }
@@ -2471,15 +2519,23 @@
       if (isDragging) endDrag(e);
     });
 
-    // 탭 비활성 시 자동재생 중지 (배터리 절약)
+    // 리사이즈 시 활성 카드 중앙 위치 재계산 (애니메이션 없이 즉시 스냅)
+    var resizeTimer = null;
+    window.addEventListener('resize', function(){
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function(){ updateUI(true); }, 120);
+    });
+
+    // 탭 비활성 시 자동재생 중지
     document.addEventListener('visibilitychange', function(){
       if (document.hidden) stopAutoplay();
       else if (!isPaused) startAutoplay();
     });
 
-    // 초기 렌더 + 자동재생 시작
+    // 초기 렌더 + 이미지 로드 후 위치 재계산 (레이아웃 완성 대기)
     renderAll();
-    updateUI();
+    // 초기 UI (transition 없이 즉시 배치)
+    requestAnimationFrame(function(){ updateUI(true); });
     startAutoplay();
   })();
 
