@@ -602,16 +602,89 @@
     background:var(--bg-1);
     border-top:1px solid var(--line-soft);
   }
-  /* Region tabs */
-  .region-tabs{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    gap:8px;
+  /* ═══════════════════════════════════════
+     지역 SVG 지도 (7개 시)
+     ═══════════════════════════════════════ */
+  .region-map-wrap{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.15)),
+               var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px 12px 10px;
     margin-bottom:14px;
   }
+  .region-map{
+    width:100%;
+    max-width:320px;
+    height:auto;
+    display:block;
+    margin:0 auto;
+  }
+  .rm-shape{
+    fill:rgba(255,255,255,0.04);
+    stroke:var(--line);
+    stroke-width:1;
+    cursor:pointer;
+    transition:fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+  }
+  .rm-shape:hover{
+    fill:rgba(167,139,250,0.14);
+    stroke:var(--accent-2);
+  }
+  .rm-group.is-active .rm-shape{
+    fill:url(#rmActiveGrad);
+    stroke:var(--accent-2);
+    stroke-width:1.5;
+    filter:url(#rmActiveShadow);
+  }
+  .rm-label{
+    font-family:'Pretendard', -apple-system, sans-serif;
+    font-size:11px;
+    font-weight:700;
+    fill:var(--text-1);
+    text-anchor:middle;
+    dominant-baseline:middle;
+    pointer-events:none;
+    transition:fill 0.25s ease;
+  }
+  .rm-count{
+    font-family:'Pretendard', -apple-system, sans-serif;
+    font-size:9px;
+    font-weight:600;
+    fill:var(--text-2);
+    text-anchor:middle;
+    dominant-baseline:middle;
+    pointer-events:none;
+    transition:fill 0.25s ease;
+  }
+  .rm-group.is-active .rm-label{ fill:#0a0a0d; font-weight:800; }
+  .rm-group.is-active .rm-count{ fill:rgba(10,10,13,0.65); }
+
+  /* ═══════════════════════════════════════
+     Region tabs — 가로 스크롤 (7개 시)
+     ═══════════════════════════════════════ */
+  .region-tabs-wrap{
+    position:relative;
+    margin-bottom:14px;
+    /* 히어로 padding 상쇄 없이 카드 폭 안에서 스크롤 */
+  }
+  .region-tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:2px 2px 6px;
+    /* 스크롤 시 활성 탭이 중앙에 오도록 */
+    scroll-snap-type:x proximity;
+  }
+  .region-tabs::-webkit-scrollbar{ display:none; }
   .region-tab{
-    padding:11px 4px;
-    border-radius:12px;
+    flex:0 0 auto;
+    scroll-snap-align:center;
+    padding:11px 16px;
+    border-radius:100px;
     background:var(--panel);
     border:1px solid var(--line);
     color:var(--text-1);
@@ -620,11 +693,13 @@
     font-weight:700;
     letter-spacing:-0.01em;
     cursor:pointer;
-    transition:background .15s ease, color .15s ease, border-color .15s ease, transform .1s ease;
+    transition:background .18s ease, color .18s ease, border-color .18s ease, transform .1s ease;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:4px;
+    gap:5px;
+    white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
   }
   .region-tab:active{ transform:scale(0.97); }
   .region-tab .rt-count{
@@ -643,10 +718,20 @@
     background:var(--gradient-metal);
     color:#0a0a0d;
     border-color:transparent;
+    box-shadow:0 4px 12px rgba(167,139,250,0.30);
   }
   .region-tab.is-active .rt-count{
     background:rgba(0,0,0,0.15);
     color:#0a0a0d;
+  }
+
+  /* 매장 카드 fade-in (지역/매장 변경 시) */
+  .store-card.is-fadein{
+    animation:sc-fadein 0.35s ease-out;
+  }
+  @keyframes sc-fadein{
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0); }
   }
 
   /* ═══════════════════════════════════════
@@ -2279,12 +2364,28 @@
       <div class="nearest-status" id="nearestStatus" hidden></div>
     </div>
 
-    <!-- Region tabs (수동 브라우징용 세컨더리) -->
-    <div class="region-tabs" role="tablist" aria-label="지역 선택">
-      <button type="button" class="region-tab is-active" data-region="안산" role="tab" aria-selected="true">안산 <span class="rt-count" id="cnt-안산">0</span></button>
-      <button type="button" class="region-tab" data-region="평택" role="tab" aria-selected="false">평택 <span class="rt-count" id="cnt-평택">0</span></button>
-      <button type="button" class="region-tab" data-region="수원" role="tab" aria-selected="false">수원 <span class="rt-count" id="cnt-수원">0</span></button>
-      <button type="button" class="region-tab" data-region="인천" role="tab" aria-selected="false">인천 <span class="rt-count" id="cnt-인천">0</span></button>
+    <!-- 지역 네트워크 지도 (SVG · 7개 시) -->
+    <div class="region-map-wrap" aria-hidden="false">
+      <svg class="region-map" viewBox="0 0 320 240" id="regionMap"
+           role="img" aria-label="LG유플러스 공식파트너 매장 지역 지도">
+        <defs>
+          <!-- 활성 지역용 실버·라벤더 그라디언트 -->
+          <linearGradient id="rmActiveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"  stop-color="#c4b5fd"/>
+            <stop offset="50%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#e2e8f0"/>
+          </linearGradient>
+          <filter id="rmActiveShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#a78bfa" flood-opacity="0.45"/>
+          </filter>
+        </defs>
+        <!-- 각 시는 JS가 REGIONS 순서대로 동적 생성 -->
+      </svg>
+    </div>
+
+    <!-- Region tabs — 7개 시 · JS 동적 렌더 (가로 스크롤 지원) -->
+    <div class="region-tabs-wrap">
+      <div class="region-tabs" id="regionTabs" role="tablist" aria-label="지역 선택"></div>
     </div>
 
     <!-- Store selector -->
@@ -2987,59 +3088,78 @@
   })();
 
   /* ============================================================
-     STORE DATA — 매장 정보 (실제 데이터)
-     region: 지역 그룹 ("안산" | "평택" | "수원" | "인천")
-     name: 매장 정식명 (드롭다운/카드 표시용)
-     posName: POS 시스템상 매장명 (내부 참고용, 화면 미표시)
-     tel: 전화번호
-     address: 주소 (Geocoder로 좌표 변환, 미승인 시 주소 검색 링크)
-     nearby: 인근 랜드마크 (카드에 "인근" 항목으로 표시)
-     manager: 담당자 (내부 참고용, 화면 미표시)
+     STORE DATA — 매장 정보 (실제 주소 기준 7개 시로 재분류)
+     region: 실제 주소상 시 이름 ("안산시"·"시흥시"·"군포시"·"수원시"·"화성시"·"부천시"·"인천시")
+     name: 매장 정식명 · posName: POS 내부명 · tel · address · nearby · manager
+     매장 추가/삭제 시 REGIONS 메타의 카운트/지도는 자동 갱신됨
      ============================================================ */
+
+  /* 7개 시 메타: 라벨 · 지도 중심 좌표 · 기본 확대 레벨(카카오맵 level 1~14, 작을수록 확대)
+     - 좌표는 각 시청 위치 근사값
+     - 다중 마커 표시 후 bounds 자동 fit 하므로 level은 초기값(fallback) */
+  var REGIONS = [
+    { id:"안산시", label:"안산", center:{lat:37.3225, lng:126.8309}, level:6 },
+    { id:"시흥시", label:"시흥", center:{lat:37.3803, lng:126.8028}, level:6 },
+    { id:"군포시", label:"군포", center:{lat:37.3616, lng:126.9351}, level:5 },
+    { id:"수원시", label:"수원", center:{lat:37.2636, lng:127.0286}, level:7 },
+    { id:"화성시", label:"화성", center:{lat:37.2000, lng:126.9316}, level:8 },
+    { id:"부천시", label:"부천", center:{lat:37.5035, lng:126.7660}, level:6 },
+    { id:"인천시", label:"인천", center:{lat:37.4340, lng:126.7300}, level:6 }
+  ];
+
   var stores = [
-    // ── 안산 (14) ──
-    { id:"a01", region:"안산", name:"엠씨_본점 사무실",        posName:"사무실",     tel:"031-401-9018",  address:"안산시 단원구 고잔로 108, 대동조이월드 12층", nearby:"롯데시네마 센트럴락",                 manager:"대표님" },
-    { id:"a02", region:"안산", name:"광정동_광림프라자점",     posName:"산본점",     tel:"031-393-9019",  address:"군포시 산본로 323번길 16-15, 광림빌딩 1층",   nearby:"산본 로데오거리 분수대 앞",          manager:"전봉민" },
-    { id:"a03", region:"안산", name:"선부3동_동명상가점",       posName:"동명점",     tel:"031-401-9019",  address:"안산시 단원구 선부광장1로 82, 1층",           nearby:"토마토 신발가게 옆 / 한샘마트 건너편", manager:"유지현" },
-    { id:"a04", region:"안산", name:"본오3동_상록롯데마트점",   posName:"본오점",     tel:"031-8042-7018", address:"안산시 상록구 샘골로 147, 1층",               nearby:"본오동 먹자골목 롯데마트 건너편",     manager:"김명주" },
-    { id:"a05", region:"안산", name:"산본1동_산본시장점",       posName:"산시점",     tel:"031-360-7019",  address:"군포시 금산로 94, 1층",                       nearby:"산본시장 입구",                       manager:"김상백" },
-    { id:"a06", region:"안산", name:"장곡동_신협점",            posName:"이현모바일", tel:"031-401-6019",  address:"시흥시 진말로9번길 2, 1층",                   nearby:"에이스 식자재마트 옆",                manager:"모근영 소사장" },
-    { id:"a07", region:"안산", name:"선부3동_롯데마트점",       posName:"선부점",     tel:"070-8225-9019", address:"안산시 단원구 달미로 75, 1층",                nearby:"선부중학교 / 롯데마트 사거리",         manager:"송강직 소사장" },
-    { id:"a08", region:"안산", name:"고잔동_고잔신한은행점",    posName:"고잔점",     tel:"031-414-9019",  address:"안산시 단원구 광덕동로 61, 1층",              nearby:"고잔 우체국 맞은편",                  manager:"이지완" },
-    { id:"a09", region:"안산", name:"월피동_월피주공점",        posName:"월피점",     tel:"031-439-6019",  address:"안산시 상록구 충장로 572-1, 1층",             nearby:"월피주공 1단지 아파트 정문 앞",       manager:"최재혁" },
-    { id:"a10", region:"안산", name:"일동_일동GS25점",          posName:"일동점",     tel:"031-401-7019",  address:"안산시 상록구 도매시장로 119, 1층",           nearby:"일동 하모니마트 앞",                  manager:"" },
-    { id:"a11", region:"안산", name:"이동_이동파리바게뜨점",    posName:"DH모바일",   tel:"031-407-9019",  address:"안산시 상록구 도매시장로 37, 1층",            nearby:"농수산물시장 파리바게뜨 옆",          manager:"이동현 소사장" },
-    { id:"a12", region:"안산", name:"신천동_삼미시장3호점",     posName:"이현모바일", tel:"031-439-7019",  address:"시흥시 삼미시장1길 17, 1층",                  nearby:"삼미시장 입구",                       manager:"모근영 소사장" },
-    { id:"a13", region:"안산", name:"와동_와동점",              posName:"와동점",     tel:"031-439-9019",  address:"안산시 단원구 와동공원로 121, 1층",           nearby:"와동체육공원 / 황토마을 건너편",       manager:"" },
-    { id:"a14", region:"안산", name:"원곡동_행정복지센터점",    posName:"원곡점",     tel:"031-311-9019",  address:"안산시 단원구 원곡로 44, 1층",                nearby:"현대종합 할인백화점 옆",              manager:"렴미" },
+    // ── 안산시 (10) ──
+    { id:"a01", region:"안산시", name:"엠씨_본점 사무실",        posName:"사무실",     tel:"031-401-9018",  address:"안산시 단원구 고잔로 108, 대동조이월드 12층", nearby:"롯데시네마 센트럴락",                 manager:"대표님" },
+    { id:"a03", region:"안산시", name:"선부3동_동명상가점",       posName:"동명점",     tel:"031-401-9019",  address:"안산시 단원구 선부광장1로 82, 1층",           nearby:"토마토 신발가게 옆 / 한샘마트 건너편", manager:"유지현" },
+    { id:"a04", region:"안산시", name:"본오3동_상록롯데마트점",   posName:"본오점",     tel:"031-8042-7018", address:"안산시 상록구 샘골로 147, 1층",               nearby:"본오동 먹자골목 롯데마트 건너편",     manager:"김명주" },
+    { id:"a07", region:"안산시", name:"선부3동_롯데마트점",       posName:"선부점",     tel:"070-8225-9019", address:"안산시 단원구 달미로 75, 1층",                nearby:"선부중학교 / 롯데마트 사거리",         manager:"송강직 소사장" },
+    { id:"a08", region:"안산시", name:"고잔동_고잔신한은행점",    posName:"고잔점",     tel:"031-414-9019",  address:"안산시 단원구 광덕동로 61, 1층",              nearby:"고잔 우체국 맞은편",                  manager:"이지완" },
+    { id:"a09", region:"안산시", name:"월피동_월피주공점",        posName:"월피점",     tel:"031-439-6019",  address:"안산시 상록구 충장로 572-1, 1층",             nearby:"월피주공 1단지 아파트 정문 앞",       manager:"최재혁" },
+    { id:"a10", region:"안산시", name:"일동_일동GS25점",          posName:"일동점",     tel:"031-401-7019",  address:"안산시 상록구 도매시장로 119, 1층",           nearby:"일동 하모니마트 앞",                  manager:"" },
+    { id:"a11", region:"안산시", name:"이동_이동파리바게뜨점",    posName:"DH모바일",   tel:"031-407-9019",  address:"안산시 상록구 도매시장로 37, 1층",            nearby:"농수산물시장 파리바게뜨 옆",          manager:"이동현 소사장" },
+    { id:"a13", region:"안산시", name:"와동_와동점",              posName:"와동점",     tel:"031-439-9019",  address:"안산시 단원구 와동공원로 121, 1층",           nearby:"와동체육공원 / 황토마을 건너편",       manager:"" },
+    { id:"a14", region:"안산시", name:"원곡동_행정복지센터점",    posName:"원곡점",     tel:"031-311-9019",  address:"안산시 단원구 원곡로 44, 1층",                nearby:"현대종합 할인백화점 옆",              manager:"렴미" },
 
-    // ── 평택 (4) ──
-    { id:"b01", region:"평택", name:"병점동_병점진안점",        posName:"병점점",     tel:"031-221-9019",  address:"화성시 효행로 1060, 1층",                     nearby:"병점 롯데시네마 옆 건물",            manager:"정종두" },
-    { id:"b02", region:"평택", name:"청계동_동탄점",            posName:"동탄점",     tel:"070-4001-9019", address:"화성시 동탄대로시범길 142, 1층",              nearby:"베스킨라빈스 건물",                   manager:"윤석현" },
-    { id:"b03", region:"평택", name:"산척동_동탄호수공원점",    posName:"호수점",     tel:"070-7543-1888", address:"화성시 동탄순환대로 127-5, 1층",              nearby:"우성 센트럴타워",                     manager:"이종욱" },
-    { id:"b04", region:"평택", name:"병점동_태안점",            posName:"태안점",     tel:"031-895-4019",  address:"화성시 병점2로 38, 1층",                      nearby:"삼성프라자 건물",                     manager:"김지예" },
+    // ── 시흥시 (2) ──
+    { id:"a06", region:"시흥시", name:"장곡동_신협점",            posName:"이현모바일", tel:"031-401-6019",  address:"시흥시 진말로9번길 2, 1층",                   nearby:"에이스 식자재마트 옆",                manager:"모근영 소사장" },
+    { id:"a12", region:"시흥시", name:"신천동_삼미시장3호점",     posName:"이현모바일", tel:"031-439-7019",  address:"시흥시 삼미시장1길 17, 1층",                  nearby:"삼미시장 입구",                       manager:"모근영 소사장" },
 
-    // ── 수원 (3) ──
-    { id:"c01", region:"수원", name:"화서1동_화서사거리점",     posName:"화서점",     tel:"070-4300-4813", address:"수원시 팔달구 팔달로 115, 1층",               nearby:"화서 사거리 / 화서 다이소 맞은편",     manager:"조기붕" },
-    { id:"c02", region:"수원", name:"송죽동_종합운동장점",      posName:"송죽점",     tel:"070-7543-4813", address:"수원시 장안구 경수대로 921, 1층",             nearby:"송죽동 KT위즈파크 경기장 건너편 스타벅스 옆", manager:"권용범" },
-    { id:"c03", region:"수원", name:"매교동_매교역사거리점",    posName:"매교점",     tel:"031-895-5593",  address:"수원시 팔달구 인계로 20, B115호",             nearby:"매교역 8번 출구 버스 정류장 앞",      manager:"" },
+    // ── 군포시 (2) ──
+    { id:"a02", region:"군포시", name:"광정동_광림프라자점",     posName:"산본점",     tel:"031-393-9019",  address:"군포시 산본로 323번길 16-15, 광림빌딩 1층",   nearby:"산본 로데오거리 분수대 앞",          manager:"전봉민" },
+    { id:"a05", region:"군포시", name:"산본1동_산본시장점",       posName:"산시점",     tel:"031-360-7019",  address:"군포시 금산로 94, 1층",                       nearby:"산본시장 입구",                       manager:"김상백" },
 
-    // ── 인천 (7) — 부천시 주소 3곳 포함 (원본 지역 분류 그대로 유지) ──
-    { id:"d01", region:"인천", name:"역곡동_역곡점",            posName:"역곡점",     tel:"032-724-8019",  address:"부천시 원미구 역곡로 7, 1층",                 nearby:"역곡 서울약국 옆",                    manager:"김병주" },
-    { id:"d02", region:"인천", name:"구월4동_모래내시장역점",   posName:"모래내시장점", tel:"032-468-8019", address:"인천광역시 남동구 호구포로 818",              nearby:"모래내시장역 3번 출구 앞",           manager:"서범석" },
-    { id:"d03", region:"인천", name:"논현동_아이플렉스점",      posName:"아이플렉스점", tel:"070-4645-4563", address:"인천광역시 남동구 논고개로 123번길 17",       nearby:"기업은행 옆",                         manager:"강건욱" },
-    { id:"d04", region:"인천", name:"논현동_라페스타점",        posName:"라페스타점", tel:"032-433-8019",  address:"인천광역시 남동구 논고개로 71",               nearby:"버거킹 옆",                           manager:"진선미" },
-    { id:"d05", region:"인천", name:"도당동_도당점",            posName:"도당점",     tel:"070-4068-8019", address:"부천시 원미구 옥산로 153, 1층",               nearby:"삼성스토어 건물",                     manager:"이태호" },
-    { id:"d06", region:"인천", name:"만수동_만수로점",          posName:"만수로점",   tel:"070-4833-9625", address:"인천광역시 남동구 만수로 47",                 nearby:"파리바게뜨 앞",                       manager:"신명균" },
-    { id:"d07", region:"인천", name:"중동_중동시장점",          posName:"중동점",     tel:"070-4078-8019", address:"부천시 원미구 부흥로 197, 1층",               nearby:"메가커피 옆",                         manager:"이민욱" }
+    // ── 수원시 (3) ──
+    { id:"c01", region:"수원시", name:"화서1동_화서사거리점",     posName:"화서점",     tel:"070-4300-4813", address:"수원시 팔달구 팔달로 115, 1층",               nearby:"화서 사거리 / 화서 다이소 맞은편",     manager:"조기붕" },
+    { id:"c02", region:"수원시", name:"송죽동_종합운동장점",      posName:"송죽점",     tel:"070-7543-4813", address:"수원시 장안구 경수대로 921, 1층",             nearby:"송죽동 KT위즈파크 경기장 건너편 스타벅스 옆", manager:"권용범" },
+    { id:"c03", region:"수원시", name:"매교동_매교역사거리점",    posName:"매교점",     tel:"031-895-5593",  address:"수원시 팔달구 인계로 20, B115호",             nearby:"매교역 8번 출구 버스 정류장 앞",      manager:"" },
+
+    // ── 화성시 (4) ──
+    { id:"b01", region:"화성시", name:"병점동_병점진안점",        posName:"병점점",     tel:"031-221-9019",  address:"화성시 효행로 1060, 1층",                     nearby:"병점 롯데시네마 옆 건물",            manager:"정종두" },
+    { id:"b02", region:"화성시", name:"청계동_동탄점",            posName:"동탄점",     tel:"070-4001-9019", address:"화성시 동탄대로시범길 142, 1층",              nearby:"베스킨라빈스 건물",                   manager:"윤석현" },
+    { id:"b03", region:"화성시", name:"산척동_동탄호수공원점",    posName:"호수점",     tel:"070-7543-1888", address:"화성시 동탄순환대로 127-5, 1층",              nearby:"우성 센트럴타워",                     manager:"이종욱" },
+    { id:"b04", region:"화성시", name:"병점동_태안점",            posName:"태안점",     tel:"031-895-4019",  address:"화성시 병점2로 38, 1층",                      nearby:"삼성프라자 건물",                     manager:"김지예" },
+
+    // ── 부천시 (3) ──
+    { id:"d01", region:"부천시", name:"역곡동_역곡점",            posName:"역곡점",     tel:"032-724-8019",  address:"부천시 원미구 역곡로 7, 1층",                 nearby:"역곡 서울약국 옆",                    manager:"김병주" },
+    { id:"d05", region:"부천시", name:"도당동_도당점",            posName:"도당점",     tel:"070-4068-8019", address:"부천시 원미구 옥산로 153, 1층",               nearby:"삼성스토어 건물",                     manager:"이태호" },
+    { id:"d07", region:"부천시", name:"중동_중동시장점",          posName:"중동점",     tel:"070-4078-8019", address:"부천시 원미구 부흥로 197, 1층",               nearby:"메가커피 옆",                         manager:"이민욱" },
+
+    // ── 인천시 (4) ──
+    { id:"d02", region:"인천시", name:"구월4동_모래내시장역점",   posName:"모래내시장점", tel:"032-468-8019", address:"인천광역시 남동구 호구포로 818",              nearby:"모래내시장역 3번 출구 앞",           manager:"서범석" },
+    { id:"d03", region:"인천시", name:"논현동_아이플렉스점",      posName:"아이플렉스점", tel:"070-4645-4563", address:"인천광역시 남동구 논고개로 123번길 17",       nearby:"기업은행 옆",                         manager:"강건욱" },
+    { id:"d04", region:"인천시", name:"논현동_라페스타점",        posName:"라페스타점", tel:"032-433-8019",  address:"인천광역시 남동구 논고개로 71",               nearby:"버거킹 옆",                           manager:"진선미" },
+    { id:"d06", region:"인천시", name:"만수동_만수로점",          posName:"만수로점",   tel:"070-4833-9625", address:"인천광역시 남동구 만수로 47",                 nearby:"파리바게뜨 앞",                       manager:"신명균" }
   ];
 
   /* ============================================================
-     STORE SELECTOR + DETAIL RENDERING
-     - 지역 탭 → 매장 드롭다운 필터 → 매장 카드 렌더
+     STORE SELECTOR + REGION UI (7개 시)
+     - SVG 지도 · 지역 탭 · 매장 드롭다운 · 카드 · 지도 마커를
+       하나의 상태(currentRegion / selectedStore)로 통합 관리
+     - 양방향 sync: 탭 ↔ SVG ↔ 드롭다운 ↔ 카카오맵 마커
      ============================================================ */
   (function(){
-    var regionTabs = document.querySelectorAll('.region-tab');
+    var svgMap     = document.getElementById('regionMap');
+    var tabsBox    = document.getElementById('regionTabs');
     var sel        = document.getElementById('storeSelect');
     var card       = document.getElementById('storeCard');
     var emptyState = document.getElementById('storeEmpty');
@@ -3053,19 +3173,99 @@
     var btnCallSub = document.getElementById('btnCallSub');
     var btnRoute   = document.getElementById('btnRoute');
 
-    var currentRegion = '안산';
+    var currentRegion = REGIONS[0].id;  // 기본: 안산시
 
-    // 지역별 매장 개수 뱃지 채우기
-    ['안산','평택','수원','인천'].forEach(function(r){
-      var el = document.getElementById('cnt-' + r);
-      if (el) el.textContent = stores.filter(function(s){ return s.region === r; }).length;
-    });
+    /* --- 헬퍼 --- */
+    function countByRegion(regionId){
+      return stores.filter(function(s){ return s.region === regionId; }).length;
+    }
+    function findStore(id){
+      for (var i=0; i<stores.length; i++) if (stores[i].id === id) return stores[i];
+      return null;
+    }
+    function findRegion(id){
+      for (var i=0; i<REGIONS.length; i++) if (REGIONS[i].id === id) return REGIONS[i];
+      return null;
+    }
+    function routeUrl(s){
+      return 'https://map.kakao.com/link/search/' + encodeURIComponent(s.address);
+    }
 
-    function populateDropdown(region){
-      // 기존 옵션 제거 (placeholder만 남김)
+    /* --- SVG 지도 레이아웃 (viewBox 320x240, 각 시 근사 위치) ---
+       실제 지도 축소가 아닌 상대적 위치 시각화 (한눈에 탐색 가능) */
+    var SVG_LAYOUT = {
+      '부천시': { x:110, y:15,  w:70, h:44 },
+      '인천시': { x:22,  y:60,  w:75, h:44 },
+      '시흥시': { x:110, y:75,  w:70, h:44 },
+      '군포시': { x:188, y:75,  w:65, h:44 },
+      '수원시': { x:200, y:135, w:75, h:44 },
+      '안산시': { x:70,  y:135, w:75, h:44 },
+      '화성시': { x:150, y:190, w:80, h:44 }
+    };
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+
+    function renderSvgMap(){
+      REGIONS.forEach(function(r){
+        var pos = SVG_LAYOUT[r.id];
+        if (!pos) return;
+        var count = countByRegion(r.id);
+        var g = document.createElementNS(SVG_NS, 'g');
+        g.setAttribute('class', 'rm-group' + (r.id === currentRegion ? ' is-active' : ''));
+        g.setAttribute('data-region', r.id);
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'button');
+        g.setAttribute('aria-label', r.label + ' 지역 매장 ' + count + '개');
+
+        var rect = document.createElementNS(SVG_NS, 'rect');
+        rect.setAttribute('class', 'rm-shape');
+        rect.setAttribute('x', pos.x); rect.setAttribute('y', pos.y);
+        rect.setAttribute('width', pos.w); rect.setAttribute('height', pos.h);
+        rect.setAttribute('rx', 10);
+        g.appendChild(rect);
+
+        var labelText = document.createElementNS(SVG_NS, 'text');
+        labelText.setAttribute('class', 'rm-label');
+        labelText.setAttribute('x', pos.x + pos.w/2);
+        labelText.setAttribute('y', pos.y + pos.h/2 - 4);
+        labelText.textContent = r.label;
+        g.appendChild(labelText);
+
+        var countText = document.createElementNS(SVG_NS, 'text');
+        countText.setAttribute('class', 'rm-count');
+        countText.setAttribute('x', pos.x + pos.w/2);
+        countText.setAttribute('y', pos.y + pos.h/2 + 10);
+        countText.textContent = count + '개';
+        g.appendChild(countText);
+
+        g.addEventListener('click', function(){ setActiveRegion(r.id); });
+        g.addEventListener('keydown', function(e){
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveRegion(r.id); }
+        });
+        svgMap.appendChild(g);
+      });
+    }
+
+    /* --- 탭 렌더 --- */
+    function renderTabs(){
+      tabsBox.innerHTML = '';
+      REGIONS.forEach(function(r){
+        var count = countByRegion(r.id);
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'region-tab' + (r.id === currentRegion ? ' is-active' : '');
+        btn.setAttribute('data-region', r.id);
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', r.id === currentRegion ? 'true' : 'false');
+        btn.innerHTML = r.label + ' <span class="rt-count">' + count + '</span>';
+        btn.addEventListener('click', function(){ setActiveRegion(r.id); });
+        tabsBox.appendChild(btn);
+      });
+    }
+
+    /* --- 드롭다운 필터 --- */
+    function populateDropdown(regionId){
       while (sel.options.length > 1) sel.remove(1);
-      stores
-        .filter(function(s){ return s.region === region; })
+      stores.filter(function(s){ return s.region === regionId; })
         .forEach(function(s){
           var opt = document.createElement('option');
           opt.value = s.id;
@@ -3075,18 +3275,40 @@
       sel.value = '';
     }
 
-    function findStore(id){
-      for (var i=0; i<stores.length; i++) if (stores[i].id === id) return stores[i];
-      return null;
+    /* --- 상태 통합: setActiveRegion (모든 UI + 지도 동기화) --- */
+    function setActiveRegion(regionId, opts){
+      opts = opts || {};
+      if (regionId === currentRegion && !opts.force) return;
+      currentRegion = regionId;
+
+      // SVG 지도 하이라이트
+      var svgGroups = svgMap.querySelectorAll('.rm-group');
+      svgGroups.forEach(function(g){
+        g.classList.toggle('is-active', g.getAttribute('data-region') === regionId);
+      });
+
+      // 탭 활성 + 활성 탭 자동 중앙 스크롤
+      var tabs = tabsBox.querySelectorAll('.region-tab');
+      tabs.forEach(function(t){
+        var active = t.getAttribute('data-region') === regionId;
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+        if (active){
+          try { t.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' }); } catch(_){}
+        }
+      });
+
+      // 드롭다운 재구성 + 카드 리셋 (매장 미선택 상태로)
+      populateDropdown(regionId);
+      renderStoreInfo(null);
+
+      // 지도: 해당 시의 모든 매장 마커 표시 + 자동 bounds fit
+      if (typeof renderRegionMarkers === 'function'){
+        renderRegionMarkers(regionId);
+      }
     }
 
-    function routeUrl(s){
-      // 주소 기반 카카오맵 검색 링크 (앱/웹 자동 라우팅)
-      return 'https://map.kakao.com/link/search/' + encodeURIComponent(s.address);
-    }
-
-    // 매장 정보 카드 + 전화/길찾기 버튼을 하나의 렌더 함수로 통합
-    // 매장 선택 이벤트와 초기 로드에서 모두 이 함수를 호출
+    /* --- 매장 정보 카드 렌더 --- */
     function renderStoreInfo(s){
       if (!s){
         card.hidden = true;
@@ -3095,8 +3317,15 @@
         btnCallSub.textContent = '—';
         btnRoute.href = '#';
         emptyState.classList.remove('is-hidden');
+        if (typeof unhighlightAllMarkers === 'function') unhighlightAllMarkers();
+        if (typeof closeStoreInfoWindow === 'function') closeStoreInfoWindow();
         return;
       }
+      // fade-in 애니메이션 트리거
+      card.classList.remove('is-fadein');
+      void card.offsetWidth;
+      card.classList.add('is-fadein');
+
       nameEl.textContent = s.name;
       addrEl.textContent = s.address;
       if (s.nearby && s.nearby.trim()){
@@ -3106,65 +3335,67 @@
         nearbyRow.style.display = 'none';
       }
       telEl.textContent = s.tel;
-
-      // 전화 문의: 하이픈 포함 원본 그대로 tel: 링크 (브라우저가 알아서 처리)
       btnCall.href = 'tel:' + s.tel;
       btnCallSub.textContent = s.tel;
-
-      // 오시는 길: 카카오맵 주소 검색 링크
       btnRoute.href = routeUrl(s);
 
       card.hidden = false;
       btnBar.hidden = false;
       emptyState.classList.add('is-hidden');
 
-      updateMap(s);
+      // 선택 매장 강조 + info window
+      if (typeof focusStoreMarker === 'function') focusStoreMarker(s);
     }
-    // 이전 이름과의 호환 (내부 참조용)
-    var renderStore = renderStoreInfo;
+    var renderStore = renderStoreInfo;  // 이전 이름 호환
 
-    // 지역 탭 클릭 핸들러
-    regionTabs.forEach(function(tab){
-      tab.addEventListener('click', function(){
-        var region = tab.getAttribute('data-region');
-        if (region === currentRegion) return;
-        currentRegion = region;
-        regionTabs.forEach(function(t){
-          var active = t === tab;
-          t.classList.toggle('is-active', active);
-          t.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        populateDropdown(region);
-        renderStore(null); // 카드/버튼 리셋
-      });
-    });
-
+    /* 드롭다운 이벤트 */
     sel.addEventListener('change', function(){
       renderStore(findStore(sel.value));
     });
 
-    // 초기 로드: 첫 지역(안산) 드롭다운 채우기 + 첫 매장(엠씨_본점 사무실) 자동 선택
+    /* --- 초기 렌더 --- */
+    renderSvgMap();
+    renderTabs();
     populateDropdown(currentRegion);
+
+    // 초기 지도: 첫 지역의 모든 매장 마커 (SDK 로드 대기)
+    if (typeof renderRegionMarkers === 'function'){
+      renderRegionMarkers(currentRegion);
+    }
+
+    // 첫 매장 자동 선택 (기존 동작 유지 — 카드 표시 + 마커 강조)
     var firstStore = stores.filter(function(s){ return s.region === currentRegion; })[0];
     if (firstStore){
       sel.value = firstStore.id;
       renderStoreInfo(firstStore);
     }
+
+    /* 외부 노출 (nearest-store 찾기 등에서 사용) */
+    window.__setActiveRegion = setActiveRegion;
+    window.__findRegion = findRegion;
+    window.__findStore = findStore;
+    window.__getCurrentRegion = function(){ return currentRegion; };
   })();
 
   /* ============================================================
-     KAKAO MAP INIT (Geocoder 기반 — 주소만으로 마커 표시)
-     - appkey는 https://developers.kakao.com 에서 발급 후 아래 자리
-       KAKAO_APP_KEY 상수에 입력. Web 플랫폼 도메인 등록 필수.
-     - libraries=services 파라미터로 Geocoder 활성화.
+     KAKAO MAP + 다중 마커 시스템
+     - loadKakaoSDK / ensureGeocoder / geocodeAllStores 는 재사용
+     - 지역 선택 → 해당 시의 모든 매장 마커 표시 + bounds 자동 fit
+     - 매장 선택 → 해당 마커만 강조(활성 아이콘 + BOUNCE + InfoWindow)
+     - Marker Pool 로 마커 재생성 최소화
      ============================================================ */
   var KAKAO_APP_KEY = "80d58aeb4e69096faa8e1c254bfc0510";  // JavaScript 키
 
   var kakaoMap = null;
-  var kakaoMarker = null;
   var kakaoGeocoder = null;
-  // 첫 매장이 렌더될 때까지 지도 초기화를 유예 (좌표 필요)
   var mapCenterFallback = { lat: 37.3225, lng: 126.8309 }; // 안산시청 근처
+
+  /* Marker pool + 브랜드 마커 이미지 (SVG data URI) */
+  var markerPool = [];
+  var normalMarkerImg = null;
+  var activeMarkerImg = null;
+  var storeInfoWindow = null;
+  var activeMarkerStoreId = null;
 
   function loadKakaoSDK(){
     return new Promise(function(resolve, reject){
@@ -3184,56 +3415,207 @@
     });
   }
 
+  /* 브랜드 컬러(라벤더) 마커 SVG — 일반 vs 활성 두 사이즈 */
+  function makeBrandMarkerImages(){
+    if (normalMarkerImg && activeMarkerImg) return;
+    var normalSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36">' +
+        '<defs><linearGradient id="n" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#7c3aed"/>' +
+        '</linearGradient></defs>' +
+        '<path fill="url(#n)" stroke="white" stroke-width="1.5" d="M14 2C7 2 2 7 2 14c0 10 12 20 12 20s12-10 12-20c0-7-5-12-12-12z"/>' +
+        '<circle cx="14" cy="13" r="4" fill="white"/>' +
+      '</svg>';
+    var activeSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="52" viewBox="0 0 40 52">' +
+        '<defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0" stop-color="#e9d5ff"/><stop offset="1" stop-color="#7c3aed"/>' +
+        '</linearGradient>' +
+        '<filter id="af"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#7c3aed" flood-opacity="0.5"/></filter></defs>' +
+        '<g filter="url(#af)">' +
+          '<path fill="url(#a)" stroke="white" stroke-width="2" d="M20 3C11 3 4 10 4 19c0 14 16 28 16 28s16-14 16-28c0-9-7-16-16-16z"/>' +
+          '<circle cx="20" cy="18" r="6" fill="white"/>' +
+          '<circle cx="20" cy="18" r="3" fill="#7c3aed"/>' +
+        '</g>' +
+      '</svg>';
+    normalMarkerImg = new kakao.maps.MarkerImage(
+      'data:image/svg+xml;utf8,' + encodeURIComponent(normalSvg),
+      new kakao.maps.Size(28, 36),
+      { offset: new kakao.maps.Point(14, 36) }
+    );
+    activeMarkerImg = new kakao.maps.MarkerImage(
+      'data:image/svg+xml;utf8,' + encodeURIComponent(activeSvg),
+      new kakao.maps.Size(40, 52),
+      { offset: new kakao.maps.Point(20, 52) }
+    );
+  }
+
   function initKakaoMap(center){
     var el = document.getElementById('kakaoMap');
     kakaoMap = new kakao.maps.Map(el, {
       center: new kakao.maps.LatLng(center.lat, center.lng),
-      level: 4
-    });
-    kakaoMarker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(center.lat, center.lng),
-      map: kakaoMap
+      level: 6
     });
     if (kakao.maps.services && kakao.maps.services.Geocoder){
       kakaoGeocoder = new kakao.maps.services.Geocoder();
     }
+    makeBrandMarkerImages();
+    storeInfoWindow = new kakao.maps.InfoWindow({ removable: true, zIndex: 3 });
     document.getElementById('mapFallback').classList.add('is-hidden');
   }
 
-  function moveToAddress(address){
-    if (!kakaoGeocoder){
-      console.warn('[Kakao Map] Geocoder 미로드 — libraries=services 확인 필요');
+  /* Marker pool 확장 (필요 개수만큼 미리 생성) */
+  function ensureMarkerPool(count){
+    while (markerPool.length < count){
+      var m = new kakao.maps.Marker({ image: normalMarkerImg, clickable: true });
+      markerPool.push(m);
+    }
+  }
+
+  /* 지도 fallback UI 표시 (SDK 로드 실패·도메인 미등록 등) */
+  function showMapFallback(err){
+    var fb = document.getElementById('mapFallback');
+    if (!fb) return;
+    fb.classList.remove('is-hidden');
+    fb.querySelector('.mf-title').textContent = '지도 표시 대기 중';
+    fb.querySelector('.mf-desc').textContent =
+      '카카오 도메인 등록 승인 후 자동으로 표시됩니다.\n하단 "오시는 길" 버튼으로 카카오맵에서 위치 확인 가능';
+    if (err) console.warn('[Kakao Map] ' + err.message);
+  }
+
+  /* 선택 지역의 모든 매장 마커 렌더 (마커풀 재사용) */
+  function renderRegionMarkers(regionId){
+    if (!kakaoMap){
+      loadKakaoSDK().then(function(){
+        var region = window.__findRegion && window.__findRegion(regionId);
+        initKakaoMap(region ? region.center : mapCenterFallback);
+        _doRenderRegionMarkers(regionId);
+      }).catch(showMapFallback);
       return;
     }
-    kakaoGeocoder.addressSearch(address, function(result, status){
-      if (status !== kakao.maps.services.Status.OK || !result[0]){
-        console.warn('[Kakao Map] 주소 변환 실패:', address);
-        return;
+    _doRenderRegionMarkers(regionId);
+  }
+
+  function _doRenderRegionMarkers(regionId){
+    if (!normalMarkerImg) makeBrandMarkerImages();
+    var sel = document.getElementById('storeSelect');
+    var regionStores = stores.filter(function(s){ return s.region === regionId; });
+    ensureMarkerPool(regionStores.length);
+
+    // 매장 좌표 준비 (기존 storeCoords 캐시 재사용, 실패해도 계속 진행)
+    geocodeAllStores().catch(function(){}).then(function(){
+      var bounds = new kakao.maps.LatLngBounds();
+      var placed = 0;
+      var firstStoreWithCoord = null;
+
+      regionStores.forEach(function(s, i){
+        var c = storeCoords[s.id];
+        var m = markerPool[i];
+        if (!c){ m.setMap(null); return; }
+
+        var pos = new kakao.maps.LatLng(c.lat, c.lng);
+        m.setImage(normalMarkerImg);
+        m.setPosition(pos);
+        m.setMap(kakaoMap);
+        m.__storeId = s.id;
+
+        // 이전 리스너 제거 후 재등록 (매장 참조가 지역별로 달라짐)
+        if (m.__clickHandler){
+          kakao.maps.event.removeListener(m, 'click', m.__clickHandler);
+        }
+        m.__clickHandler = (function(store){
+          return function(){
+            sel.value = store.id;
+            sel.dispatchEvent(new Event('change'));
+          };
+        })(s);
+        kakao.maps.event.addListener(m, 'click', m.__clickHandler);
+        bounds.extend(pos);
+        if (!firstStoreWithCoord) firstStoreWithCoord = s;
+        placed++;
+      });
+
+      // 사용 안 하는 마커 숨김 (풀 재활용)
+      for (var i = regionStores.length; i < markerPool.length; i++){
+        markerPool[i].setMap(null);
       }
-      var pos = new kakao.maps.LatLng(result[0].y, result[0].x);
-      kakaoMap.setCenter(pos);
-      kakaoMap.setLevel(3);
-      kakaoMarker.setPosition(pos);
+
+      // 정보창 닫기 + 활성 마커 상태 리셋
+      if (storeInfoWindow) storeInfoWindow.close();
+      activeMarkerStoreId = null;
+
+      // 지도 프레이밍: 다중 매장 → bounds fit, 단일 → panTo, 좌표 없음 → 지역 중심
+      if (placed > 1){
+        kakaoMap.setBounds(bounds, 40, 40, 40, 40);
+      } else if (placed === 1 && firstStoreWithCoord){
+        var c = storeCoords[firstStoreWithCoord.id];
+        kakaoMap.setLevel(4);
+        kakaoMap.panTo(new kakao.maps.LatLng(c.lat, c.lng));
+      } else {
+        var region = window.__findRegion && window.__findRegion(regionId);
+        if (region){
+          kakaoMap.setLevel(region.level || 6);
+          kakaoMap.panTo(new kakao.maps.LatLng(region.center.lat, region.center.lng));
+        }
+      }
     });
   }
 
+  /* 선택 매장 마커 강조 + 부드러운 panTo + InfoWindow */
+  function focusStoreMarker(store){
+    if (!kakaoMap || !store) return;
+    var c = storeCoords[store.id];
+    if (!c) return;
+    var pos = new kakao.maps.LatLng(c.lat, c.lng);
+
+    // 부드러운 panTo (현재 중심에서 애니메이션)
+    kakaoMap.panTo(pos);
+
+    // 마커 이미지 스왑 + BOUNCE 애니메이션
+    var targetMarker = null;
+    markerPool.forEach(function(m){
+      if (!m.getMap()) return; // 현재 지역에 표시되지 않은 마커는 skip
+      if (m.__storeId === store.id){
+        m.setImage(activeMarkerImg);
+        targetMarker = m;
+        if (kakao.maps.MarkerAnimation && m.setAnimation){
+          m.setAnimation(kakao.maps.MarkerAnimation.BOUNCE);
+          setTimeout(function(){ m.setAnimation(null); }, 800);
+        }
+      } else {
+        m.setImage(normalMarkerImg);
+      }
+    });
+    activeMarkerStoreId = store.id;
+
+    // InfoWindow (매장명 + 주소)
+    if (storeInfoWindow && targetMarker){
+      storeInfoWindow.setContent(
+        '<div style="padding:10px 14px;font-family:Pretendard,system-ui,sans-serif;color:#0a0a0d;min-width:200px;max-width:260px;">' +
+          '<div style="font-size:13px;font-weight:800;letter-spacing:-0.01em;margin-bottom:4px;">' + store.name + '</div>' +
+          '<div style="font-size:11.5px;color:#555;line-height:1.45;word-break:keep-all;">' + store.address + '</div>' +
+        '</div>'
+      );
+      storeInfoWindow.open(kakaoMap, targetMarker);
+    }
+  }
+
+  /* 마커 강조 해제 + InfoWindow 닫기 */
+  function unhighlightAllMarkers(){
+    if (!normalMarkerImg) return;
+    markerPool.forEach(function(m){
+      if (m.getMap()) m.setImage(normalMarkerImg);
+    });
+    activeMarkerStoreId = null;
+  }
+  function closeStoreInfoWindow(){
+    if (storeInfoWindow) storeInfoWindow.close();
+  }
+
+  /* 이전 호환 (외부에서 updateMap 호출 시) */
   function updateMap(store){
     if (!store) return;
-    if (!kakaoMap){
-      loadKakaoSDK().then(function(){
-        initKakaoMap(mapCenterFallback);
-        moveToAddress(store.address);
-      }).catch(function(err){
-        var fb = document.getElementById('mapFallback');
-        fb.classList.remove('is-hidden');
-        fb.querySelector('.mf-title').textContent = '지도 표시 대기 중';
-        fb.querySelector('.mf-desc').textContent =
-          '카카오 도메인 등록 승인 후 자동으로 표시됩니다.\n하단 "오시는 길" 버튼으로 카카오맵에서 위치 확인 가능';
-        console.warn('[Kakao Map] ' + err.message);
-      });
-      return;
-    }
-    moveToAddress(store.address);
+    focusStoreMarker(store);
   }
 
   /* ============================================================
