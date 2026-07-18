@@ -11,23 +11,39 @@
 <style>
 
   :root{
-    --bg-0:#000000;
-    --bg-1:#0a0a0d;
-    --bg-2:#131317;
-    --panel:#17171c;
-    --line:rgba(255,255,255,0.09);
-    --line-soft:rgba(255,255,255,0.05);
-    --text-0:#f5f5f7;
-    --text-1:#b8b8c0;
-    --text-2:#7c7c86;
-    --accent:#a5b4d4;
-    --accent-2:#d9c9a3;
-    --accent-glow: rgba(165,180,212,0.35);
-    --gradient-metal: linear-gradient(135deg,#8e97a8 0%,#c9cfdd 25%,#eef1f6 45%,#b7bfd0 60%,#7d8598 80%,#c3cad9 100%);
+    /* ═══ Premium White Palette ═══ */
+    --bg-0:#ffffff;
+    --bg-1:#f8fafc;
+    --bg-2:#f1f5f9;
+    --panel:#ffffff;
+    --surface:#eef2f7;
+    --line:rgba(15,23,42,0.08);
+    --line-soft:rgba(15,23,42,0.05);
+    /* Typography */
+    --text-0:#0f172a;   /* Title */
+    --text-1:#334155;   /* Body */
+    --text-2:#64748b;   /* Caption */
+    --text-3:#94a3b8;   /* Info */
+    /* Accent — Premium Lavender */
+    --accent:#7c3aed;
+    --accent-2:#a78bfa;
+    --accent-3:#c4b5fd;
+    --accent-glow: rgba(124,58,237,0.18);
+    --gradient-metal: linear-gradient(135deg,#ffffff 0%,#f8fafc 45%,#e2e8f0 100%);
+    /* Multi-Layer Shadow System */
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.04), 0 2px 8px rgba(15,23,42,.04);
+    --shadow-md: 0 2px 4px rgba(15,23,42,.03), 0 12px 24px rgba(15,23,42,.06);
+    --shadow-lg: 0 2px 4px rgba(15,23,42,.03), 0 12px 24px rgba(15,23,42,.06), 0 24px 60px rgba(15,23,42,.05);
+    --shadow-xl: 0 4px 8px rgba(15,23,42,.04), 0 20px 40px rgba(15,23,42,.08), 0 40px 80px rgba(15,23,42,.06);
+    --shadow-glow: 0 0 0 4px rgba(124,58,237,.12), 0 12px 28px rgba(124,58,237,.18);
+    /* Radius */
     --radius-lg: 22px;
-    --radius-md: 14px;
-    --radius-sm: 8px;
+    --radius-md: 18px;
+    --radius-sm: 10px;
     --maxw: 480px;
+    /* Motion */
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --ease-in-out: cubic-bezier(.4,0,.2,1);
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -2664,6 +2680,269 @@
       box-shadow:0 0 60px rgba(0,0,0,0.6);
     }
   }
+
+  /* ════════════════════════════════════════════════════════
+     ★ PREMIUM WHITE OVERRIDE LAYER ★
+     - JS/HTML/이벤트 무변경, CSS 오버라이드만
+     - 하드코딩된 다크 컬러(rgba(0,0,0,…), 다크 배경, dark radial 등)을
+       화이트 팔레트로 덮어씀
+     - 캐스케이드 우선순위 확보용 스코프 셀렉터 사용
+     ════════════════════════════════════════════════════════ */
+
+  /* --- Selection & Scrollbar --- */
+  ::selection{ background:var(--accent-3); color:#1e1b4b; }
+  html{ scroll-behavior:smooth; }
+  html::-webkit-scrollbar{ width:12px; height:12px; }
+  html::-webkit-scrollbar-track{ background:#f1f5f9; }
+  html::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg,#cbd5e1,#94a3b8);
+    border-radius:100px;
+    border:3px solid #f1f5f9;
+  }
+  html::-webkit-scrollbar-thumb:hover{ background:linear-gradient(180deg,#a78bfa,#7c3aed); }
+
+  /* --- Body & Page Base --- */
+  body{
+    background:linear-gradient(180deg,#f8fafc 0%,#ffffff 20%,#ffffff 100%);
+    color:var(--text-0);
+    font-variant-numeric:tabular-nums;
+  }
+  .page{
+    background:transparent;
+  }
+
+  /* --- Topbar: Glass Effect --- */
+  .topbar{
+    background:rgba(255,255,255,0.82) !important;
+    backdrop-filter:blur(24px) saturate(180%);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);
+    border-bottom:1px solid rgba(15,23,42,0.06);
+    box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 2px 12px rgba(15,23,42,.03);
+  }
+  .topbar .brand{ color:var(--text-0); font-weight:800; }
+  .topbar .carrier{
+    color:#7c3aed;
+    background:rgba(167,139,250,0.10);
+    border:1px solid rgba(124,58,237,0.20);
+  }
+
+  /* --- Hero --- */
+  .hero{
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(167,139,250,0.16) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(180deg,#f8fafc 0%,#ffffff 100%) !important;
+  }
+  .hero::before{
+    background:radial-gradient(circle, rgba(167,139,250,0.20) 0%, rgba(167,139,250,0) 70%) !important;
+  }
+  .eyebrow{ color:var(--text-2) !important; }
+
+  /* --- 모든 다크 rgba(255,255,255,x) 표면을 화이트 서페이스로 --- */
+  .calc-card,
+  .card,
+  .benefit-card,
+  .store-card,
+  .faq-item,
+  .cd-flip,
+  .toggle-track,
+  .cir-input,
+  .cir-select{
+    color:var(--text-0);
+  }
+
+  /* --- Section / Card Backgrounds (다크 회색 → 화이트 패널) --- */
+  section, .section{
+    background:transparent;
+  }
+  .calc-section,
+  .benefit-section,
+  .store-section,
+  .faq-section,
+  .plan-section,
+  .product-section{
+    background:transparent;
+  }
+
+  /* --- 다크 배경을 사용하는 카드들: 화이트 메탈 --- */
+  .calc-card,
+  .benefit-card,
+  .store-card,
+  .faq-item,
+  .plan-card,
+  .cd-flip{
+    background:linear-gradient(180deg,#ffffff 0%,#fbfcfe 100%);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-md);
+    border-radius:var(--radius-md);
+  }
+  .calc-card:hover,
+  .benefit-card:hover,
+  .store-card:hover,
+  .plan-card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-lg);
+    transition:all .3s var(--ease-out);
+  }
+
+  /* --- Typography 최소치 보정: 다크에서 밝은 텍스트로 조립된 라벨들이
+         화이트에서 잘 보이도록 --- */
+  h1, h2, h3, h4{ color:var(--text-0); }
+  p, li, dd{ color:var(--text-1); }
+  small, .caption, .muted{ color:var(--text-2); }
+
+  /* --- Inputs / Select (통일된 화이트 인풋) --- */
+  input, select, textarea{
+    color:var(--text-0);
+    background:#ffffff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    transition:all .25s var(--ease-out);
+    font-variant-numeric:tabular-nums;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--accent-2);
+    box-shadow:0 0 0 4px rgba(124,58,237,0.12);
+  }
+
+  /* --- Buttons / CTA — Premium Shine Effect --- */
+  .btn-primary,
+  .cta-primary,
+  .cta,
+  button.primary,
+  .btn-cta{
+    position:relative;
+    background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);
+    color:#ffffff;
+    border:none;
+    border-radius:100px;
+    box-shadow:
+      0 4px 12px rgba(124,58,237,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+    transition:all .3s var(--ease-out);
+    overflow:hidden;
+    font-weight:800;
+  }
+  .btn-primary::after,
+  .cta-primary::after,
+  .cta::after,
+  .btn-cta::after{
+    content:"";
+    position:absolute;
+    top:0; left:-100%;
+    width:100%; height:100%;
+    background:linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,0.35) 50%,
+      transparent 100%);
+    transition:left .8s var(--ease-out);
+    pointer-events:none;
+  }
+  .btn-primary:hover,
+  .cta-primary:hover,
+  .cta:hover,
+  .btn-cta:hover{
+    transform:translateY(-2px);
+    box-shadow:
+      0 8px 20px rgba(124,58,237,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.30);
+  }
+  .btn-primary:hover::after,
+  .cta-primary:hover::after,
+  .cta:hover::after,
+  .btn-cta:hover::after{ left:100%; }
+
+  /* --- Countdown Flip: 화이트 메탈 --- */
+  .cd-flip,
+  .countdown-item,
+  .cd-num{
+    color:var(--text-0);
+    background:linear-gradient(180deg,#ffffff 0%,#eef2f7 100%);
+    border:1px solid var(--line);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 8px 20px rgba(15,23,42,0.08);
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* --- Divider lines / hairlines --- */
+  hr,
+  .divider{
+    border:none;
+    height:1px;
+    background:var(--line);
+  }
+
+  /* --- Focus Ring 통일 --- */
+  *:focus-visible{
+    outline:2px solid var(--accent-2);
+    outline-offset:2px;
+    border-radius:6px;
+  }
+
+  /* --- Kakao Map wrap: 화이트 프레임 --- */
+  #kakaoMap, .kakao-map, .map-canvas{
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    box-shadow:var(--shadow-md);
+    overflow:hidden;
+  }
+
+  /* --- Tab bar (city tabs 등) — 화이트 배경 --- */
+  .tab-bar,
+  .tabs,
+  .city-tabs{
+    background:transparent;
+  }
+
+  /* --- Store rows, FAQ open state — 다크 대비 개선 --- */
+  .store-row{ color:var(--text-1); }
+  .store-row strong,
+  .store-row .v{ color:var(--text-0); font-variant-numeric:tabular-nums; }
+
+  /* --- 카운트다운 라벨/구분자 톤 --- */
+  .cd-label{ color:var(--text-2); }
+
+  /* --- Fade-in 등 등장 애니메이션 감쇠 (화이트에선 그림자로 이미 충분) --- */
+  @keyframes premiumFadeIn{
+    from{ opacity:0; transform:translateY(12px); }
+    to  { opacity:1; transform:translateY(0); }
+  }
+
+  /* --- Scroll Progress Bar (상단, 순수 CSS + JS 무의존 아님이라 시각 라인만 대체) --- */
+  /* JS 미접근 상 정적 라인만 */
+
+  /* --- 반응형 모바일 보정 --- */
+  @media (max-width:768px){
+    .calc-card,
+    .benefit-card,
+    .store-card{
+      box-shadow:var(--shadow-sm);
+    }
+    body{ background:#ffffff; }
+  }
+
+  /* --- 접근성: prefers-reduced-motion --- */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:0.01ms !important;
+      transition-duration:0.01ms !important;
+    }
+  }
+
+  /* --- Store: nearest-card 화이트 변환 --- */
+  .nearest-card{
+    background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%) !important;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-md);
+    color:var(--text-0);
+  }
+  .nearest-card *{ color:inherit; }
+  .nearest-card strong, .nearest-card .v{ color:var(--text-0); }
+
+  /* --- 최종 안전망: 순수 black/white 하드코딩 제거 시도 --- */
+  [style*="rgba(0,0,0"]{ /* inline dark 방어는 CSS로 불가 — JS 무접근이므로 스킵 */ }
+
 </style>
 </head>
 <body>
