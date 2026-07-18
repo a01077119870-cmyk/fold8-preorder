@@ -1674,6 +1674,10 @@
     flex-direction:column;
     gap:6px;
   }
+  /* ═══════════════════════════════════════
+     Premium White Input UI (계산기 입력창)
+     - 화이트 메탈 카드 + 다크 네이비 숫자 + LG U+ 라벤더 focus glow
+     ═══════════════════════════════════════ */
   .cir-label{
     font-size:11.5px;
     font-weight:600;
@@ -1687,52 +1691,111 @@
   }
   .cir-input, .cir-select{
     width:100%;
-    padding:11px 40px 11px 14px;
-    border-radius:10px;
-    background:rgba(0,0,0,0.25);
-    border:1px solid var(--line);
-    color:var(--text-0);
+    height:52px;                         /* 터치 타깃 확보 (모바일 접근성) */
+    padding:0 46px 0 16px;
+    border-radius:16px;
+    /* 화이트 메탈 그라디언트 */
+    background:linear-gradient(135deg,
+      #f8fafc 0%,
+      #eef2f7 45%,
+      #e2e8f0 100%);
+    border:1px solid rgba(15,23,42,0.08);
+    color:#0f172a;
     font-family:inherit;
-    font-size:14px;
-    font-weight:700;
-    letter-spacing:-0.005em;
+    font-size:20px;                      /* 모바일 기준 */
+    font-weight:800;
+    letter-spacing:-0.03em;
+    line-height:1.2;
     outline:none;
     font-variant-numeric:tabular-nums;
     text-align:right;
-    transition:border-color .15s ease, box-shadow .15s ease;
+    box-shadow:
+      0 6px 18px rgba(0,0,0,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.9);
+    transition:transform 0.25s ease, background 0.25s ease,
+               border-color 0.25s ease, box-shadow 0.25s ease;
     -webkit-appearance:none;
     -moz-appearance:none;
     appearance:none;
   }
+  /* Hover: 미세하게 밝아지고 살짝 떠오름 */
+  .cir-input:not([readonly]):hover,
+  .cir-select:hover{
+    background:linear-gradient(135deg, #ffffff 0%, #f5f8fc 45%, #e6eaf1 100%);
+    transform:translateY(-1px);
+    box-shadow:
+      0 10px 22px rgba(0,0,0,0.10),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  /* Focus: LG U+ 라벤더 border + soft glow */
+  .cir-input:focus, .cir-select:focus{
+    border-color:#a78bfa;
+    box-shadow:
+      0 0 0 4px rgba(167,139,250,0.18),
+      0 10px 25px rgba(167,139,250,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  /* Placeholder */
+  .cir-input::placeholder{
+    color:#64748b;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    opacity:1;
+  }
+
+  /* Select: 텍스트 좌측 정렬 + 커스텀 chevron (다크 네이비) */
   .cir-select{
     text-align:left;
-    padding-right:34px;
+    padding-right:44px;
+    font-size:18px;
+    font-weight:700;
     cursor:pointer;
-    background-image:linear-gradient(45deg, transparent 50%, var(--plan-accent) 50%),
-                     linear-gradient(135deg, var(--plan-accent) 50%, transparent 50%);
-    background-position:calc(100% - 18px) 50%, calc(100% - 13px) 50%;
-    background-size:5px 5px, 5px 5px;
-    background-repeat:no-repeat;
+    /* 다크 네이비 chevron (SVG data URI) */
+    background-image:
+      linear-gradient(135deg, #f8fafc 0%, #eef2f7 45%, #e2e8f0 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5L6 6.5L11 1.5'/></svg>");
+    background-position:0 0, calc(100% - 16px) 50%;
+    background-size:100% 100%, 12px 8px;
+    background-repeat:no-repeat, no-repeat;
   }
-  .cir-input:focus, .cir-select:focus{
-    border-color:var(--plan-accent);
-    box-shadow:0 0 0 3px var(--plan-glow);
+  .cir-select:hover{
+    background-image:
+      linear-gradient(135deg, #ffffff 0%, #f5f8fc 45%, #e6eaf1 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5L6 6.5L11 1.5'/></svg>");
   }
+
+  /* Readonly (출고가 자동 계산): "자동 계산됨" 강조 — 유리 카드 + dashed */
   .cir-input[readonly]{
-    background:rgba(0,0,0,0.15);
-    color:var(--text-1);
+    background:linear-gradient(135deg,
+      rgba(255,255,255,0.08),
+      rgba(255,255,255,0.04));
+    border:1px dashed rgba(255,255,255,0.18);
+    color:rgba(255,255,255,0.9);
     cursor:default;
-    border-style:dashed;
+    box-shadow:none;
+    text-shadow:none;
   }
+  .cir-input[readonly]:hover,
   .cir-input[readonly]:focus{
-    border-color:var(--line);
+    transform:none;
+    background:linear-gradient(135deg,
+      rgba(255,255,255,0.08),
+      rgba(255,255,255,0.04));
+    border-color:rgba(255,255,255,0.18);
     box-shadow:none;
   }
+
   .cir-label .cir-hint{
     font-size:10.5px;
     color:var(--text-2);
     font-weight:500;
     margin-left:3px;
+  }
+
+  /* 데스크톱: 숫자 살짝 크게 */
+  @media (min-width:481px){
+    .cir-input{ font-size:22px; }
+    .cir-select{ font-size:19px; }
   }
   .calc-subsidy-notice{
     display:flex;
@@ -1773,14 +1836,403 @@
   .cr-notice .crn-icon{ font-size:11px; }
   .cir-unit{
     position:absolute;
-    right:14px;
-    color:var(--text-2);
-    font-size:12px;
-    font-weight:600;
+    right:16px;
+    color:#0f172a;
+    opacity:0.75;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:-0.01em;
     pointer-events:none;
+    transition:color 0.25s ease, opacity 0.25s ease;
+  }
+  /* Readonly 필드에서는 단위도 라이트 톤으로 (다크 유리 배경 대비) */
+  .cir-input[readonly] + .cir-unit,
+  .cir-input-wrap:has(.cir-input[readonly]) .cir-unit{
+    color:rgba(255,255,255,0.7);
+    opacity:1;
   }
 
-  /* 결과 카드 */
+  /* ═══════════════════════════════════════
+     Premium Configurator: 좌측 선택 + 우측 실시간 견적서
+     ═══════════════════════════════════════ */
+  .calc-layout{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  @media (min-width:769px){
+    .calc-layout{
+      grid-template-columns:minmax(0, 1.85fr) minmax(0, 1fr); /* 65 / 35 */
+      gap:24px;
+      align-items:start;
+    }
+  }
+  .calc-config .calc-card{ margin-bottom:0; }
+
+  /* 블록 그룹 (레이블 + 콘텐츠) */
+  .calc-block{
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px solid var(--line-soft);
+  }
+  .calc-block:first-child{ margin-top:0; padding-top:0; border-top:none; }
+  .calc-block-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    color:var(--text-2);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+
+  /* 칩 (가입유형) */
+  .calc-chip-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .calc-chip{
+    flex:1;
+    min-width:88px;
+    padding:12px 14px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.03);
+    border:1.5px solid var(--line);
+    color:var(--text-1);
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .calc-chip:hover{
+    background:rgba(167,139,250,0.06);
+    border-color:rgba(167,139,250,0.35);
+    color:var(--text-0);
+  }
+  .calc-chip.is-active{
+    background:linear-gradient(135deg, rgba(167,139,250,0.16), rgba(167,139,250,0.06));
+    border-color:var(--plan-accent);
+    color:#fff;
+    box-shadow:0 6px 16px rgba(167,139,250,0.18);
+    transform:scale(1.02);
+  }
+
+  /* 기기 선택 카드 */
+  .calc-device-cards{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+  }
+  @media (max-width:400px){
+    .calc-device-cards{ grid-template-columns:1fr; }
+  }
+  .calc-device-card{
+    position:relative;
+    padding:14px 12px;
+    border-radius:16px;
+    background:linear-gradient(135deg, #f8fafc 0%, #eef2f7 45%, #e2e8f0 100%);
+    border:1.5px solid rgba(15,23,42,0.10);
+    color:#0f172a;
+    font-family:inherit;
+    cursor:pointer;
+    text-align:left;
+    transition:all 0.25s ease;
+    box-shadow:0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .calc-device-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  .calc-device-card.is-active{
+    border-color:var(--plan-accent);
+    box-shadow:
+      0 0 0 4px rgba(167,139,250,0.18),
+      0 10px 24px rgba(167,139,250,0.20),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  .calc-device-card .cdc-check{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:var(--plan-accent);
+    color:#fff;
+    font-size:11px;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transform:scale(0.6);
+    transition:all 0.25s ease;
+  }
+  .calc-device-card.is-active .cdc-check{ opacity:1; transform:scale(1); }
+  .calc-device-card .cdc-name{
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:-0.015em;
+    line-height:1.25;
+    margin-bottom:6px;
+    word-break:keep-all;
+  }
+  .calc-device-card .cdc-price{
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:-0.02em;
+    color:#0f172a;
+    font-variant-numeric:tabular-nums;
+  }
+  .calc-device-card .cdc-price small{
+    font-size:10.5px;
+    font-weight:700;
+    opacity:0.65;
+    margin-left:2px;
+  }
+
+  /* 요금제 인기 픽 (칩) + 전체 select */
+  .calc-plan-featured{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+  }
+  .calc-plan-featured .cpf-chip{
+    flex:0 0 auto;
+    padding:10px 14px;
+    border-radius:100px;
+    background:rgba(255,255,255,0.03);
+    border:1.5px solid var(--line);
+    color:var(--text-1);
+    font-family:inherit;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:-0.005em;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    -webkit-tap-highlight-color:transparent;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .calc-plan-featured .cpf-chip .cpf-badge{
+    font-size:9.5px;
+    font-weight:900;
+    padding:2px 6px;
+    border-radius:100px;
+    background:var(--plan-accent);
+    color:#17171c;
+    letter-spacing:0.02em;
+  }
+  .calc-plan-featured .cpf-chip:hover{
+    background:rgba(167,139,250,0.08);
+    border-color:rgba(167,139,250,0.4);
+    color:var(--text-0);
+  }
+  .calc-plan-featured .cpf-chip.is-active{
+    background:linear-gradient(135deg, rgba(167,139,250,0.20), rgba(167,139,250,0.08));
+    border-color:var(--plan-accent);
+    color:#fff;
+    box-shadow:0 4px 10px rgba(167,139,250,0.16);
+  }
+
+  /* 지원금 그룹 패널 */
+  .calc-subsidy-panel .calc-subsidy-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:2px 8px;
+    border-radius:100px;
+    background:rgba(255,193,7,0.10);
+    border:1px solid rgba(255,193,7,0.25);
+    color:#f5d78e;
+    font-size:9.5px;
+    font-weight:800;
+    letter-spacing:0.03em;
+    text-transform:none;
+    margin-left:auto;
+  }
+  .calc-subsidy-tag.is-hidden{ display:none; }
+  .calc-subsidy-rows{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--line-soft);
+    border-radius:14px;
+    padding:12px;
+  }
+  .calc-subsidy-row{
+    display:grid;
+    grid-template-columns:1fr 1.4fr;
+    align-items:center;
+    gap:10px;
+  }
+  .calc-subsidy-row .csr-label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--text-1);
+    letter-spacing:-0.005em;
+  }
+  .calc-subsidy-row .csr-input-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+  .calc-subsidy-row .csr-input-wrap .cir-input{
+    height:44px;
+    font-size:16px;
+    padding-right:38px;
+    border-radius:12px;
+  }
+  @media (min-width:481px){
+    .calc-subsidy-row .csr-input-wrap .cir-input{ font-size:17px; }
+  }
+  .calc-subsidy-row .csr-input-wrap .cir-unit{
+    font-size:12px;
+    right:14px;
+  }
+
+  /* ═══════════════════════════════════════
+     Premium Receipt (우측 실시간 견적서)
+     ═══════════════════════════════════════ */
+  .calc-receipt-wrap{
+    position:relative;
+  }
+  @media (min-width:769px){
+    .calc-receipt-wrap{
+      position:sticky;
+      top:80px;
+    }
+  }
+  .calc-receipt{
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(167,139,250,0.12) 0%, rgba(167,139,250,0) 60%),
+      linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+    border:1px solid rgba(167,139,250,0.25);
+    border-radius:20px;
+    padding:20px 18px 18px;
+    box-shadow:0 20px 40px -20px rgba(167,139,250,0.20);
+  }
+  .cr-notice-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    padding:6px 10px;
+    background:rgba(255,193,7,0.10);
+    border:1px solid rgba(255,193,7,0.28);
+    border-radius:8px;
+    color:#f5d78e;
+    font-size:10.5px;
+    font-weight:700;
+    margin-bottom:14px;
+    letter-spacing:0.01em;
+  }
+  .cr-notice-wrap.is-hidden{ display:none; }
+
+  /* 총액 블록 */
+  .calc-total-block{
+    text-align:center;
+    padding:14px 0 18px;
+    border-bottom:1px dashed rgba(167,139,250,0.28);
+    margin-bottom:14px;
+  }
+  .calc-total-label{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-2);
+    margin-bottom:8px;
+  }
+  .calc-total-value{
+    font-size:clamp(28px, 6.5vw, 40px);
+    font-weight:900;
+    letter-spacing:-0.03em;
+    line-height:1;
+    background:linear-gradient(135deg, #c084fc 0%, #a78bfa 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-variant-numeric:tabular-nums;
+    margin-bottom:6px;
+    transition:transform 0.2s ease;
+    display:inline-block;
+  }
+  .calc-total-value.is-pulse{
+    animation:cr-pulse 0.35s ease;
+  }
+  @keyframes cr-pulse{
+    0%   { transform:scale(1); }
+    50%  { transform:scale(1.06); }
+    100% { transform:scale(1); }
+  }
+  .calc-total-unit{
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-2);
+    letter-spacing:-0.005em;
+  }
+
+  /* 견적 상세 섹션 */
+  .calc-receipt-section{
+    margin-bottom:14px;
+    padding-bottom:14px;
+    border-bottom:1px dashed rgba(255,255,255,0.06);
+  }
+  .calc-receipt-section:last-of-type{
+    border-bottom:none;
+    padding-bottom:0;
+  }
+  .crs-title{
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:0.04em;
+    color:var(--accent-2);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .crs-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:5px 0;
+    font-size:12px;
+    color:var(--text-1);
+    letter-spacing:-0.005em;
+    font-variant-numeric:tabular-nums;
+  }
+  .crs-row .crs-hint{
+    font-size:10px;
+    color:var(--text-2);
+    font-weight:500;
+    margin-left:3px;
+  }
+  .crs-row.crs-neg .crs-val{ color:#4ade80; }
+  .crs-row.crs-subtotal{
+    padding-top:8px;
+    margin-top:4px;
+    border-top:1px solid rgba(255,255,255,0.06);
+    font-weight:800;
+    color:var(--text-0);
+    font-size:13px;
+  }
+  .crs-row.crs-subtotal .crs-val{
+    color:var(--plan-accent-2);
+  }
+
+  /* 결과 카드 (기존 세로 레이아웃 잔재 — receipt로 대체됐지만 스타일 유지) */
   .calc-result{
     background:linear-gradient(135deg, rgba(167,139,250,0.10), rgba(167,139,250,0.03) 60%);
     border:1px solid rgba(167,139,250,0.28);
@@ -2206,101 +2658,131 @@
     <p class="benefit-note">* 상기 혜택은 사정에 따라 변경될 수 있으며, 자세한 내용은 매장에 문의 바랍니다.</p>
   </section>
 
-  <!-- 월 예상 청구요금 계산기 -->
+  <!-- 월 예상 청구요금 계산기 (2단 Configure + Receipt) -->
   <section class="calc-section">
     <div class="section-head">
-      <span class="tag">Bill Estimator</span>
+      <span class="tag">Premium Configurator</span>
       <h2>월 예상 청구요금 계산기</h2>
-      <p>Galaxy Z Fold8 구매 시 월 부담을 미리 확인해보세요</p>
+      <p>선택만 하면 우측에서 실시간 견적서가 완성됩니다</p>
     </div>
 
-    <div class="calc-card">
-      <!-- 방식 선택 탭 -->
-      <div class="calc-tabs" role="tablist" aria-label="구매 방식 선택">
-        <button type="button" class="calc-tab is-active" data-method="subsidy" role="tab" aria-selected="true">공시지원금 받기</button>
-        <button type="button" class="calc-tab" data-method="discount" role="tab" aria-selected="false">선택약정 25% 받기</button>
-      </div>
-
-      <!-- 할부 개월수 토글 -->
-      <div class="calc-months">
-        <span class="calc-months-label">할부 개월수</span>
-        <div class="calc-months-toggle" role="tablist" aria-label="할부 개월수 선택">
-          <button type="button" class="calc-month-btn is-active" data-months="24" role="tab" aria-selected="true">24개월</button>
-          <button type="button" class="calc-month-btn" data-months="36" role="tab" aria-selected="false">36개월</button>
-        </div>
-      </div>
-
-      <!-- 입력란 -->
-      <div class="calc-inputs">
-        <div class="calc-input-row">
-          <span class="cir-label">기기 선택</span>
-          <div class="cir-input-wrap">
-            <select class="cir-select" id="calcDevice" aria-label="기기 선택"></select>
+    <div class="calc-layout">
+      <!-- ═══ LEFT: Configure ═══ -->
+      <div class="calc-config">
+        <div class="calc-card">
+          <!-- 방식 선택 탭 -->
+          <div class="calc-tabs" role="tablist" aria-label="구매 방식 선택">
+            <button type="button" class="calc-tab is-active" data-method="subsidy" role="tab" aria-selected="true">공시지원금 받기</button>
+            <button type="button" class="calc-tab" data-method="discount" role="tab" aria-selected="false">선택약정 25% 받기</button>
           </div>
-        </div>
 
-        <div class="calc-input-row">
-          <span class="cir-label">출고가 <span class="cir-hint">(자동 설정)</span></span>
-          <div class="cir-input-wrap">
-            <input type="text" class="cir-input" id="calcPrice" readonly aria-label="출고가" tabindex="-1">
-            <span class="cir-unit">원</span>
+          <!-- 할부 개월수 토글 -->
+          <div class="calc-months">
+            <span class="calc-months-label">할부 개월수</span>
+            <div class="calc-months-toggle" role="tablist" aria-label="할부 개월수 선택">
+              <button type="button" class="calc-month-btn is-active" data-months="24" role="tab" aria-selected="true">24개월</button>
+              <button type="button" class="calc-month-btn" data-months="36" role="tab" aria-selected="false">36개월</button>
+            </div>
           </div>
-        </div>
 
-        <!-- 지원금 미확정 안내 (공시지원금 방식에서만 노출) -->
-        <div class="calc-subsidy-notice" id="subsidyNotice">
-          <span class="csn-icon" aria-hidden="true">ⓘ</span>
-          지원금 미확정 — 결정되는 대로 업데이트 예정
-        </div>
-
-        <div class="calc-input-row" id="subsidyRow1">
-          <span class="cir-label">이통사 공시지원금</span>
-          <div class="cir-input-wrap">
-            <input type="text" inputmode="numeric" class="cir-input" id="calcCarrierSubsidy" value="0" placeholder="[미정 - 추후 입력]" aria-label="이통사 공시지원금">
-            <span class="cir-unit">원</span>
+          <!-- 가입유형 (신규: 시각 chip) -->
+          <div class="calc-block">
+            <div class="calc-block-label">가입유형</div>
+            <div class="calc-chip-row" id="calcSignupChips" role="tablist" aria-label="가입유형 선택">
+              <button type="button" class="calc-chip is-active" data-signup="change" role="tab" aria-selected="true">기기변경</button>
+              <button type="button" class="calc-chip" data-signup="move" role="tab" aria-selected="false">번호이동</button>
+              <button type="button" class="calc-chip" data-signup="new" role="tab" aria-selected="false">신규가입</button>
+            </div>
           </div>
-        </div>
 
-        <div class="calc-input-row" id="subsidyRow2">
-          <span class="cir-label">대리점 추가지원금 (최대 15%)</span>
-          <div class="cir-input-wrap">
-            <input type="text" inputmode="numeric" class="cir-input" id="calcDealerSubsidy" value="0" placeholder="[미정 - 추후 입력]" aria-label="대리점 추가지원금">
-            <span class="cir-unit">원</span>
+          <!-- 기기 선택 카드 (신규 시각 UI · 기존 select는 hidden으로 유지) -->
+          <div class="calc-block">
+            <div class="calc-block-label">기기 선택</div>
+            <div class="calc-device-cards" id="calcDeviceCards" role="tablist" aria-label="기기 선택"></div>
+            <select id="calcDevice" aria-label="기기 선택" hidden></select>
           </div>
-        </div>
 
-        <div class="calc-input-row">
-          <span class="cir-label">요금제 선택</span>
-          <div class="cir-input-wrap">
-            <select class="cir-select" id="calcPlan" aria-label="요금제 선택"></select>
+          <!-- 요금제: 인기 픽 chip + 전체 select fallback -->
+          <div class="calc-block">
+            <div class="calc-block-label">요금제 선택</div>
+            <div class="calc-plan-featured" id="calcPlanFeatured" role="group" aria-label="인기 요금제 빠른 선택"></div>
+            <select class="cir-select" id="calcPlan" aria-label="전체 요금제"></select>
           </div>
-        </div>
-      </div>
 
-      <!-- 결과 -->
-      <div class="calc-result" aria-live="polite">
-        <div class="cr-notice" id="calcTempNotice">
-          <span class="crn-icon" aria-hidden="true">⚠</span>
-          지원금 확정 전 임시 계산
-        </div>
-        <div class="cr-row">
-          <span class="cr-key">월 기기값 <span class="cr-hint">(<span id="calcMonthsLabel">24</span>개월 할부)</span></span>
-          <span class="cr-val" id="calcDeviceMonthly">—</span>
-        </div>
-        <div class="cr-row">
-          <span class="cr-key">월 통신 요금 <span class="cr-hint" id="calcPlanHint">(정가)</span></span>
-          <span class="cr-val" id="calcPlanMonthly">—</span>
-        </div>
-        <div class="cr-row cr-total">
-          <span class="cr-key">월 예상 청구요금</span>
-          <span class="cr-val" id="calcTotal">—</span>
+          <!-- 지원금 그룹 패널 -->
+          <div class="calc-block calc-subsidy-panel">
+            <div class="calc-block-label">
+              지원금
+              <span class="calc-subsidy-tag" id="subsidyNotice">
+                <span class="csn-icon" aria-hidden="true">ⓘ</span> 미확정
+              </span>
+            </div>
+            <div class="calc-subsidy-rows">
+              <div class="calc-subsidy-row" id="subsidyRow1">
+                <span class="csr-label">공시지원금</span>
+                <div class="csr-input-wrap">
+                  <input type="text" inputmode="numeric" class="cir-input" id="calcCarrierSubsidy" value="0" placeholder="[미정]" aria-label="이통사 공시지원금">
+                  <span class="cir-unit">원</span>
+                </div>
+              </div>
+              <div class="calc-subsidy-row" id="subsidyRow2">
+                <span class="csr-label">추가지원금</span>
+                <div class="csr-input-wrap">
+                  <input type="text" inputmode="numeric" class="cir-input" id="calcDealerSubsidy" value="0" placeholder="[미정]" aria-label="대리점 추가지원금">
+                  <span class="cir-unit">원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 출고가 readonly (숨김 · JS 상태 유지용) -->
+          <input type="text" class="cir-input" id="calcPrice" readonly tabindex="-1" hidden aria-hidden="true">
         </div>
       </div>
 
-      <p class="calc-note">
-        ※ 36개월 선택 시 월 부담은 줄지만 약정기간이 길어집니다.<br>
-        ※ 실제 청구금액은 부가세 · 결합할인 · 카드 청구할인 등에 따라 달라질 수 있습니다.
-      </p>
+      <!-- ═══ RIGHT: Premium Receipt ═══ -->
+      <div class="calc-receipt-wrap">
+        <div class="calc-receipt" aria-live="polite">
+          <div class="cr-notice-wrap" id="calcTempNotice">
+            <span class="crn-icon" aria-hidden="true">⚠</span>
+            지원금 확정 전 임시 계산
+          </div>
+
+          <!-- 최상단: 큰 총액 -->
+          <div class="calc-total-block">
+            <div class="calc-total-label">월 예상 납부금액</div>
+            <div class="calc-total-value" id="calcTotal">—</div>
+            <div class="calc-total-unit"><span id="calcMonthsLabel">24</span>개월 할부 기준</div>
+          </div>
+
+          <!-- 휴대폰 상세 -->
+          <div class="calc-receipt-section">
+            <div class="crs-title">📱 휴대폰</div>
+            <div class="crs-row"><span>출고가</span><span class="crs-val" id="rcpPrice">—</span></div>
+            <div class="crs-row crs-neg"><span>공시지원금</span><span class="crs-val" id="rcpCarrier">—</span></div>
+            <div class="crs-row crs-neg"><span>추가지원금</span><span class="crs-val" id="rcpDealer">—</span></div>
+            <div class="crs-row crs-subtotal">
+              <span>월 기기값 <span class="crs-hint">(할부)</span></span>
+              <span class="crs-val" id="calcDeviceMonthly">—</span>
+            </div>
+          </div>
+
+          <!-- 요금제 상세 -->
+          <div class="calc-receipt-section">
+            <div class="crs-title">📞 요금제</div>
+            <div class="crs-row"><span>기본요금 <span class="crs-hint" id="calcPlanHint">(정가)</span></span><span class="crs-val" id="rcpPlanBase">—</span></div>
+            <div class="crs-row crs-subtotal">
+              <span>월 통신 요금</span>
+              <span class="crs-val" id="calcPlanMonthly">—</span>
+            </div>
+          </div>
+
+          <p class="calc-note">
+            ※ 36개월 선택 시 월 부담은 줄지만 약정기간이 길어집니다.<br>
+            ※ 실제 청구금액은 부가세 · 결합할인 · 카드 청구할인 등에 따라 달라질 수 있습니다.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2978,6 +3460,157 @@
 
     // 초기 계산
     recalc();
+  })();
+
+  /* ============================================================
+     계산기 UI 확장 (기존 recalc 무변경 · 시각 컴포넌트만 추가)
+     - 기기 카드 렌더 + hidden select 동기화
+     - 인기 요금제 chip 렌더 + hidden select 동기화
+     - 가입유형 chip 시각 활성 (계산에는 영향 없음)
+     - 우측 견적서 실시간 값 미러 (출고가/지원금/기본요금)
+     - 총액 pulse 애니메이션
+     ============================================================ */
+  (function(){
+    if (typeof devices === 'undefined' || typeof plans === 'undefined') return;
+    var deviceCardsBox   = document.getElementById('calcDeviceCards');
+    var planFeaturedBox  = document.getElementById('calcPlanFeatured');
+    var signupChipsBox   = document.getElementById('calcSignupChips');
+    var deviceSel        = document.getElementById('calcDevice');
+    var planSel          = document.getElementById('calcPlan');
+    var priceEl          = document.getElementById('calcPrice');
+    var carrierEl        = document.getElementById('calcCarrierSubsidy');
+    var dealerEl         = document.getElementById('calcDealerSubsidy');
+    var rcpPrice         = document.getElementById('rcpPrice');
+    var rcpCarrier       = document.getElementById('rcpCarrier');
+    var rcpDealer        = document.getElementById('rcpDealer');
+    var rcpPlanBase      = document.getElementById('rcpPlanBase');
+    var totalEl          = document.getElementById('calcTotal');
+    if (!deviceCardsBox || !planFeaturedBox) return;
+
+    function fmt(n){
+      if (!n && n !== 0) return '—';
+      return n.toLocaleString('ko-KR') + '원';
+    }
+    function fmtNeg(n){
+      if (!n) return '—';
+      return '−' + n.toLocaleString('ko-KR') + '원';
+    }
+
+    /* ── 기기 카드 렌더 ── */
+    devices.forEach(function(d){
+      var card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'calc-device-card' + (deviceSel.value === d.id ? ' is-active' : '');
+      card.setAttribute('data-device-id', d.id);
+      card.setAttribute('role', 'tab');
+      card.setAttribute('aria-selected', deviceSel.value === d.id ? 'true' : 'false');
+      // 짧은 이름 표기 (Ultra만 살림)
+      var shortName = d.name.replace('Galaxy ', '');
+      card.innerHTML =
+        '<span class="cdc-check" aria-hidden="true">✓</span>' +
+        '<div class="cdc-name">' + shortName + '</div>' +
+        '<div class="cdc-price">' + d.price.toLocaleString('ko-KR') + '<small>원</small></div>';
+      card.addEventListener('click', function(){
+        if (deviceSel.value === d.id) return;
+        deviceSel.value = d.id;
+        deviceSel.dispatchEvent(new Event('change'));
+        syncDeviceCards();
+      });
+      deviceCardsBox.appendChild(card);
+    });
+    function syncDeviceCards(){
+      var val = deviceSel.value;
+      deviceCardsBox.querySelectorAll('.calc-device-card').forEach(function(c){
+        var active = c.getAttribute('data-device-id') === val;
+        c.classList.toggle('is-active', active);
+        c.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    /* ── 인기 요금제 chip (Top 3 · MAX/데이터80/데이터24) ── */
+    var featuredIds = ['data-max', 'data-80', 'data-24'];
+    var featuredMeta = { 'data-max': '추천' };
+    featuredIds.forEach(function(pid){
+      var p = plans.find(function(x){ return x.id === pid; });
+      if (!p) return;
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'cpf-chip' + (planSel.value === p.id ? ' is-active' : '');
+      chip.setAttribute('data-plan-id', p.id);
+      var badge = featuredMeta[pid]
+        ? '<span class="cpf-badge">' + featuredMeta[pid] + '</span>' : '';
+      chip.innerHTML = badge + p.name + ' · <strong>' + p.price + '</strong>';
+      chip.addEventListener('click', function(){
+        if (planSel.value === p.id) return;
+        planSel.value = p.id;
+        planSel.dispatchEvent(new Event('change'));
+        syncPlanChips();
+      });
+      planFeaturedBox.appendChild(chip);
+    });
+    function syncPlanChips(){
+      var val = planSel.value;
+      planFeaturedBox.querySelectorAll('.cpf-chip').forEach(function(c){
+        c.classList.toggle('is-active', c.getAttribute('data-plan-id') === val);
+      });
+    }
+    planSel.addEventListener('change', syncPlanChips);
+
+    /* ── 가입유형 chip (시각 활성만 — 계산 영향 없음) ── */
+    if (signupChipsBox){
+      signupChipsBox.querySelectorAll('.calc-chip').forEach(function(chip){
+        chip.addEventListener('click', function(){
+          signupChipsBox.querySelectorAll('.calc-chip').forEach(function(c){
+            var active = c === chip;
+            c.classList.toggle('is-active', active);
+            c.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+        });
+      });
+    }
+
+    /* ── 우측 견적서 실시간 미러링 ── */
+    function parseNum(str){ return parseInt(String(str).replace(/[^0-9]/g,''), 10) || 0; }
+
+    function updateReceipt(){
+      // 출고가
+      rcpPrice.textContent = fmt(parseNum(priceEl.value));
+      // 지원금 (음수 표기)
+      var carrier = parseNum(carrierEl.value);
+      var dealer  = parseNum(dealerEl.value);
+      rcpCarrier.textContent = carrier > 0 ? fmtNeg(carrier) : '—';
+      rcpDealer.textContent  = dealer  > 0 ? fmtNeg(dealer)  : '—';
+      // 기본요금 (선택된 요금제 정가)
+      var planOpt = planSel.options[planSel.selectedIndex];
+      var planPrice = parseNum(planOpt && planOpt.getAttribute('data-price'));
+      rcpPlanBase.textContent = planPrice ? fmt(planPrice) : '—';
+    }
+
+    // 입력값 변경 시 견적서 자동 갱신
+    [carrierEl, dealerEl].forEach(function(el){
+      el.addEventListener('input', updateReceipt);
+    });
+    planSel.addEventListener('change', updateReceipt);
+    deviceSel.addEventListener('change', function(){
+      syncDeviceCards();
+      setTimeout(updateReceipt, 0); // recalc 이후 값 반영
+    });
+
+    /* ── 총액 값 변경 시 pulse 애니메이션 ── */
+    if ('MutationObserver' in window){
+      var prevTotal = totalEl.textContent;
+      new MutationObserver(function(){
+        var now = totalEl.textContent;
+        if (now === prevTotal || now === '—') return;
+        prevTotal = now;
+        totalEl.classList.remove('is-pulse');
+        void totalEl.offsetWidth;
+        totalEl.classList.add('is-pulse');
+      }).observe(totalEl, { childList:true, characterData:true, subtree:true });
+    }
+
+    // 초기 렌더 (recalc는 이미 실행됨 · 견적서만 초기 채움)
+    updateReceipt();
   })();
 
   /* ============================================================
