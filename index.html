@@ -1855,25 +1855,69 @@
   /* ═══════════════════════════════════════
      Premium Configurator: 좌측 선택 + 우측 실시간 견적서
      ═══════════════════════════════════════ */
+  /* ─── Enterprise 2-Column Layout ───
+     좌우 절대 침범 금지 구조: Flex + min-width:0 (좌) + flex-shrink:0 (우)
+     - 모바일: 세로 스택 (config → receipt)
+     - 태블릿/데스크톱: 2단 고정, sticky receipt
+  */
   .calc-layout{
-    display:grid;
-    grid-template-columns:1fr;
+    display:flex;
+    flex-direction:column;
     gap:20px;
+    width:100%;
+    box-sizing:border-box;
   }
+  .calc-config,
+  .calc-receipt-wrap{
+    width:100%;
+    box-sizing:border-box;
+    min-width:0;                /* Flex overflow 방어 */
+  }
+  .calc-config{
+    /* 모바일: full width */
+  }
+  .calc-config > .calc-card{
+    margin-bottom:0;
+    max-width:100%;
+    box-sizing:border-box;
+    overflow:hidden;            /* 내부 카드가 밀어내지 못하도록 */
+  }
+
   @media (min-width:769px){
     .calc-layout{
-      grid-template-columns:minmax(0, 1.85fr) minmax(0, 1fr); /* 65 / 35 */
+      flex-direction:row;
+      align-items:flex-start;
       gap:24px;
-      align-items:start;
+    }
+    .calc-config{
+      flex:1 1 0;
+      min-width:0;              /* ★ 좌측이 우측을 밀어내지 못하게 하는 핵심 속성 */
+    }
+    .calc-receipt-wrap{
+      flex:0 0 360px;           /* 우측 고정 폭 */
+      min-width:320px;
+      max-width:420px;
+      align-self:flex-start;
+      flex-shrink:0;            /* 절대 축소 금지 */
     }
   }
-  .calc-config .calc-card{ margin-bottom:0; }
+  @media (min-width:1200px){
+    .calc-receipt-wrap{
+      flex-basis:380px;
+    }
+  }
 
-  /* 블록 그룹 (레이블 + 콘텐츠) */
+  /* ═══════════════════════════════════════
+     Premium White Metal Selection System
+     - 모든 선택 컴포넌트(chip/card/select/input) 통일된 화이트 메탈
+     - 활성 상태: 2px 라벤더 border + soft glow + check badge
+     ═══════════════════════════════════════ */
+
+  /* 블록 그룹 (레이블 + 콘텐츠) — 부드러운 divider */
   .calc-block{
-    margin-top:16px;
-    padding-top:16px;
-    border-top:1px solid var(--line-soft);
+    margin-top:24px;
+    padding-top:24px;
+    border-top:1px solid rgba(148,163,184,0.12);
   }
   .calc-block:first-child{ margin-top:0; padding-top:0; border-top:none; }
   .calc-block-label{
@@ -1882,166 +1926,211 @@
     gap:8px;
     font-size:11.5px;
     font-weight:700;
-    letter-spacing:0.06em;
+    letter-spacing:0.10em;
     color:var(--text-2);
     text-transform:uppercase;
-    margin-bottom:10px;
+    margin-bottom:12px;
   }
 
-  /* 칩 (가입유형) */
+  /* === 공통: 화이트 메탈 카드 베이스 === */
+  .calc-chip,
+  .calc-device-card,
+  .calc-plan-featured .cpf-chip{
+    position:relative;
+    background:linear-gradient(135deg,
+      #ffffff 0%,
+      #f8fafc 45%,
+      #e2e8f0 100%);
+    border:1px solid rgba(15,23,42,0.08);
+    color:#0f172a;
+    font-family:inherit;
+    cursor:pointer;
+    box-shadow:
+      0 8px 20px rgba(15,23,42,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.9);
+    transition:all 0.25s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* Hover — 살짝 떠오름 + shadow 강화 */
+  .calc-chip:hover,
+  .calc-device-card:hover,
+  .calc-plan-featured .cpf-chip:hover{
+    transform:translateY(-2px);
+    box-shadow:
+      0 12px 26px rgba(15,23,42,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  /* Touch — 순간 눌림 */
+  .calc-chip:active,
+  .calc-device-card:active,
+  .calc-plan-featured .cpf-chip:active{
+    transform:scale(0.98);
+  }
+  /* 공통 active state — 2px 라벤더 border + glow */
+  .calc-chip.is-active,
+  .calc-device-card.is-active,
+  .calc-plan-featured .cpf-chip.is-active{
+    border:2px solid #a78bfa;
+    box-shadow:
+      0 0 0 4px rgba(167,139,250,0.12),
+      0 12px 28px rgba(167,139,250,0.28),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+
+  /* --- 가입유형 chip --- */
   .calc-chip-row{
     display:flex;
-    gap:8px;
+    gap:10px;
     flex-wrap:wrap;
   }
   .calc-chip{
     flex:1;
-    min-width:88px;
-    padding:12px 14px;
-    border-radius:14px;
-    background:rgba(255,255,255,0.03);
-    border:1.5px solid var(--line);
-    color:var(--text-1);
-    font-family:inherit;
-    font-size:13px;
+    min-width:96px;
+    padding:14px 14px;
+    border-radius:18px;
+    font-size:14px;
     font-weight:700;
     letter-spacing:-0.01em;
-    cursor:pointer;
-    transition:all 0.25s ease;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .calc-chip:hover{
-    background:rgba(167,139,250,0.06);
-    border-color:rgba(167,139,250,0.35);
-    color:var(--text-0);
   }
   .calc-chip.is-active{
-    background:linear-gradient(135deg, rgba(167,139,250,0.16), rgba(167,139,250,0.06));
-    border-color:var(--plan-accent);
-    color:#fff;
-    box-shadow:0 6px 16px rgba(167,139,250,0.18);
-    transform:scale(1.02);
+    font-weight:800;
   }
 
-  /* 기기 선택 카드 */
+  /* --- 기기 선택 카드 (Flex wrap, overflow-safe) --- */
   .calc-device-cards{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:8px;
-  }
-  @media (max-width:400px){
-    .calc-device-cards{ grid-template-columns:1fr; }
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:stretch;
+    justify-content:flex-start;
+    width:100%;
+    min-width:0;
+    box-sizing:border-box;
   }
   .calc-device-card{
-    position:relative;
-    padding:14px 12px;
-    border-radius:16px;
-    background:linear-gradient(135deg, #f8fafc 0%, #eef2f7 45%, #e2e8f0 100%);
-    border:1.5px solid rgba(15,23,42,0.10);
-    color:#0f172a;
-    font-family:inherit;
-    cursor:pointer;
+    /* 3열 기본, 폭 부족 시 자동 줄바꿈 */
+    flex:1 1 calc(33.333% - 7px);
+    min-width:120px;
+    max-width:100%;
+    box-sizing:border-box;
+    padding:18px 14px 16px;
+    border-radius:18px;
     text-align:left;
-    transition:all 0.25s ease;
-    box-shadow:0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
-    -webkit-tap-highlight-color:transparent;
+    min-height:112px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:10px;
+    overflow:hidden;             /* 내부 텍스트가 카드 밖으로 밀리지 않도록 */
   }
-  .calc-device-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.95);
+  @media (max-width:400px){
+    .calc-device-card{
+      flex:1 1 100%;
+      min-width:0;
+    }
   }
-  .calc-device-card.is-active{
-    border-color:var(--plan-accent);
-    box-shadow:
-      0 0 0 4px rgba(167,139,250,0.18),
-      0 10px 24px rgba(167,139,250,0.20),
-      inset 0 1px 0 rgba(255,255,255,0.95);
+  /* 기기명 */
+  .calc-device-card .cdc-name{
+    font-size:13px;
+    font-weight:800;
+    color:#0f172a;
+    letter-spacing:-0.015em;
+    line-height:1.25;
+    word-break:keep-all;
+    overflow-wrap:anywhere;      /* 긴 모델명(Ultra 등) 강제 줄바꿈 */
+    padding-right:32px;          /* check badge(26px) + 여유 공간 */
+    min-width:0;
   }
+  @media (min-width:481px){
+    .calc-device-card .cdc-name{ font-size:14px; }
+  }
+  /* 가격 — 가장 큰 시선 */
+  .calc-device-card .cdc-price{
+    font-size:20px;
+    font-weight:900;
+    color:#111827;
+    letter-spacing:-0.03em;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  @media (min-width:481px){
+    .calc-device-card .cdc-price{ font-size:22px; }
+  }
+  .calc-device-card .cdc-price small{
+    font-size:11px;
+    font-weight:700;
+    opacity:0.7;
+    margin-left:2px;
+    letter-spacing:-0.01em;
+  }
+  /* Premium Check Badge — 우측 상단 */
   .calc-device-card .cdc-check{
     position:absolute;
-    top:8px;
-    right:8px;
-    width:20px;
-    height:20px;
+    top:10px;
+    right:10px;
+    width:26px;
+    height:26px;
     border-radius:50%;
-    background:var(--plan-accent);
+    background:linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
     color:#fff;
-    font-size:11px;
+    font-size:13px;
     font-weight:900;
     display:flex;
     align-items:center;
     justify-content:center;
     opacity:0;
-    transform:scale(0.6);
-    transition:all 0.25s ease;
+    transform:scale(0.5);
+    transition:all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+      0 4px 10px rgba(124,58,237,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.4);
   }
-  .calc-device-card.is-active .cdc-check{ opacity:1; transform:scale(1); }
-  .calc-device-card .cdc-name{
-    font-size:12px;
+  .calc-device-card.is-active .cdc-check{
+    opacity:1;
+    transform:scale(1);
+  }
+
+  /* --- 요금제 인기 픽 chip --- */
+  .calc-plan-featured{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .calc-plan-featured .cpf-chip{
+    flex:1 1 calc(50% - 4px);
+    min-width:140px;
+    padding:12px 16px;
+    border-radius:18px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:-0.005em;
+    display:inline-flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    text-align:left;
+  }
+  .calc-plan-featured .cpf-chip.is-active{
     font-weight:800;
-    letter-spacing:-0.015em;
-    line-height:1.25;
-    margin-bottom:6px;
-    word-break:keep-all;
   }
-  .calc-device-card .cdc-price{
-    font-size:14px;
+  .calc-plan-featured .cpf-chip strong{
     font-weight:900;
     letter-spacing:-0.02em;
     color:#0f172a;
-    font-variant-numeric:tabular-nums;
   }
-  .calc-device-card .cdc-price small{
-    font-size:10.5px;
-    font-weight:700;
-    opacity:0.65;
-    margin-left:2px;
-  }
-
-  /* 요금제 인기 픽 (칩) + 전체 select */
-  .calc-plan-featured{
-    display:flex;
-    gap:6px;
-    flex-wrap:wrap;
-    margin-bottom:10px;
-  }
-  .calc-plan-featured .cpf-chip{
-    flex:0 0 auto;
-    padding:10px 14px;
-    border-radius:100px;
-    background:rgba(255,255,255,0.03);
-    border:1.5px solid var(--line);
-    color:var(--text-1);
-    font-family:inherit;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:-0.005em;
-    cursor:pointer;
-    transition:all 0.25s ease;
-    -webkit-tap-highlight-color:transparent;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-  }
+  /* 추천 badge — 라벤더 그라디언트 */
   .calc-plan-featured .cpf-chip .cpf-badge{
-    font-size:9.5px;
+    font-size:10px;
     font-weight:900;
-    padding:2px 6px;
+    padding:3px 8px;
     border-radius:100px;
-    background:var(--plan-accent);
-    color:#17171c;
-    letter-spacing:0.02em;
-  }
-  .calc-plan-featured .cpf-chip:hover{
-    background:rgba(167,139,250,0.08);
-    border-color:rgba(167,139,250,0.4);
-    color:var(--text-0);
-  }
-  .calc-plan-featured .cpf-chip.is-active{
-    background:linear-gradient(135deg, rgba(167,139,250,0.20), rgba(167,139,250,0.08));
-    border-color:var(--plan-accent);
-    color:#fff;
-    box-shadow:0 4px 10px rgba(167,139,250,0.16);
+    background:linear-gradient(135deg, #c084fc 0%, #7c3aed 100%);
+    color:#ffffff;
+    letter-spacing:0.03em;
+    box-shadow:0 3px 8px rgba(124,58,237,0.35);
+    order:-1;              /* 뱃지를 항상 좌측 */
+    flex-shrink:0;
   }
 
   /* 지원금 그룹 패널 */
@@ -2113,123 +2202,183 @@
       top:80px;
     }
   }
+  /* ═══════════════════════════════════════
+     Premium White Receipt — 실시간 견적 영수증
+     화이트/실버 톤 + 다크 네이비 텍스트 + 라벤더 강조
+     ═══════════════════════════════════════ */
   .calc-receipt{
-    background:
-      radial-gradient(120% 90% at 50% 0%, rgba(167,139,250,0.12) 0%, rgba(167,139,250,0) 60%),
-      linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
-    border:1px solid rgba(167,139,250,0.25);
-    border-radius:20px;
-    padding:20px 18px 18px;
-    box-shadow:0 20px 40px -20px rgba(167,139,250,0.20);
+    background:linear-gradient(135deg,
+      #ffffff 0%,
+      #f8fafc 40%,
+      #eef2f7 100%);
+    border:1px solid rgba(15,23,42,0.08);
+    border-radius:22px;
+    padding:28px 24px 24px;
+    box-shadow:0 18px 40px rgba(15,23,42,0.08);
   }
+  @media (max-width:480px){
+    .calc-receipt{ padding:24px 20px 20px; }
+  }
+
+  /* 상단 임시 계산 안내 — 부드러운 앰버 chip */
   .cr-notice-wrap{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:5px;
-    padding:6px 10px;
-    background:rgba(255,193,7,0.10);
-    border:1px solid rgba(255,193,7,0.28);
-    border-radius:8px;
-    color:#f5d78e;
-    font-size:10.5px;
+    gap:6px;
+    padding:8px 12px;
+    background:#fef9c3;
+    border:1px solid #fde68a;
+    border-radius:100px;
+    color:#92400e;
+    font-size:11px;
     font-weight:700;
-    margin-bottom:14px;
     letter-spacing:0.01em;
+    margin-bottom:20px;
   }
   .cr-notice-wrap.is-hidden{ display:none; }
+  .cr-notice-wrap .crn-icon{ font-size:12px; }
 
-  /* 총액 블록 */
+  /* 최상단 총액 블록 (가장 큰 시선 유도) */
   .calc-total-block{
     text-align:center;
-    padding:14px 0 18px;
-    border-bottom:1px dashed rgba(167,139,250,0.28);
-    margin-bottom:14px;
+    padding:0 0 24px;
+    border-bottom:1px dashed rgba(15,23,42,0.10);
+    margin-bottom:24px;
   }
   .calc-total-label{
     font-size:11.5px;
     font-weight:700;
-    letter-spacing:0.12em;
+    letter-spacing:0.14em;
     text-transform:uppercase;
-    color:var(--text-2);
-    margin-bottom:8px;
+    color:#64748b;
+    margin-bottom:10px;
   }
   .calc-total-value{
-    font-size:clamp(28px, 6.5vw, 40px);
+    font-size:clamp(28px, 6.5vw, 34px);
     font-weight:900;
-    letter-spacing:-0.03em;
+    letter-spacing:-0.04em;
     line-height:1;
-    background:linear-gradient(135deg, #c084fc 0%, #a78bfa 100%);
+    background:linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
     -webkit-background-clip:text;
     background-clip:text;
     -webkit-text-fill-color:transparent;
     font-variant-numeric:tabular-nums;
-    margin-bottom:6px;
-    transition:transform 0.2s ease;
+    margin-bottom:8px;
     display:inline-block;
+    /* 은은한 라벤더 depth */
+    filter:drop-shadow(0 6px 16px rgba(124,58,237,0.18));
+    transition:transform 0.2s ease;
   }
   .calc-total-value.is-pulse{
-    animation:cr-pulse 0.35s ease;
+    animation:cr-pulse 0.3s ease;
   }
   @keyframes cr-pulse{
-    0%   { transform:scale(1); }
-    50%  { transform:scale(1.06); }
-    100% { transform:scale(1); }
+    0%   { transform:translateY(6px); opacity:0.4; }
+    100% { transform:translateY(0);   opacity:1; }
   }
   .calc-total-unit{
-    font-size:11px;
+    font-size:12px;
     font-weight:600;
-    color:var(--text-2);
+    color:#64748b;
     letter-spacing:-0.005em;
   }
+  .calc-total-unit span{
+    color:#7c3aed;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+  }
 
-  /* 견적 상세 섹션 */
+  /* 견적 상세 섹션 (휴대폰 / 요금제) */
   .calc-receipt-section{
-    margin-bottom:14px;
-    padding-bottom:14px;
-    border-bottom:1px dashed rgba(255,255,255,0.06);
+    margin-bottom:24px;
+    padding-bottom:24px;
+    border-bottom:1px dashed rgba(15,23,42,0.10);
   }
   .calc-receipt-section:last-of-type{
     border-bottom:none;
     padding-bottom:0;
+    margin-bottom:20px;
   }
   .crs-title{
-    font-size:11.5px;
+    font-size:17px;
     font-weight:800;
-    letter-spacing:0.04em;
-    color:var(--accent-2);
-    margin-bottom:8px;
+    letter-spacing:-0.015em;
+    color:#0f172a;
+    margin-bottom:14px;
     display:flex;
     align-items:center;
-    gap:5px;
+    gap:8px;
   }
+
+  /* 각 Row — 라벨 좌측 / 값 우측 */
   .crs-row{
     display:flex;
     justify-content:space-between;
     align-items:baseline;
-    padding:5px 0;
-    font-size:12px;
-    color:var(--text-1);
+    padding:11px 0;
+    font-size:13.5px;
+    color:#475569;
+    font-weight:500;
     letter-spacing:-0.005em;
     font-variant-numeric:tabular-nums;
+    border-bottom:1px dashed rgba(15,23,42,0.08);
   }
+  .crs-row:last-child{ border-bottom:none; padding-bottom:0; }
   .crs-row .crs-hint{
-    font-size:10px;
-    color:var(--text-2);
+    font-size:11px;
+    color:#94a3b8;
     font-weight:500;
-    margin-left:3px;
+    margin-left:4px;
   }
-  .crs-row.crs-neg .crs-val{ color:#4ade80; }
-  .crs-row.crs-subtotal{
-    padding-top:8px;
-    margin-top:4px;
-    border-top:1px solid rgba(255,255,255,0.06);
+  .crs-row .crs-val{
+    color:#111827;
+    font-weight:700;
+    text-align:right;
+    /* 값 변경 시 부드러운 페이드 */
+    transition:opacity 0.25s ease, transform 0.25s ease;
+  }
+  .crs-row .crs-val.is-anim{
+    animation:crs-val-fade 0.3s ease;
+  }
+  @keyframes crs-val-fade{
+    0%   { opacity:0.3; transform:translateY(-4px); }
+    100% { opacity:1;   transform:translateY(0); }
+  }
+
+  /* 할인 (음수) 금액 — 라벤더 컬러 */
+  .crs-row.crs-neg .crs-val{
+    color:#7c3aed;
     font-weight:800;
-    color:var(--text-0);
-    font-size:13px;
+  }
+
+  /* 서브합계 (월 기기값 · 월 통신 요금) */
+  .crs-row.crs-subtotal{
+    padding-top:14px;
+    margin-top:6px;
+    border-top:1px solid rgba(15,23,42,0.10);
+    border-bottom:none;
+    font-weight:800;
+    color:#0f172a;
+    font-size:15px;
   }
   .crs-row.crs-subtotal .crs-val{
-    color:var(--plan-accent-2);
+    color:#7c3aed;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:-0.015em;
+  }
+
+  /* 하단 안내문 — receipt 안에서만 라이트 톤으로 오버라이드 */
+  .calc-receipt .calc-note{
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px dashed rgba(15,23,42,0.08);
+    color:#64748b;
+    font-size:13px;
+    line-height:1.7;
+    letter-spacing:-0.005em;
+    text-align:left;
   }
 
   /* 결과 카드 (기존 세로 레이아웃 잔재 — receipt로 대체됐지만 스타일 유지) */
@@ -3596,7 +3745,7 @@
       setTimeout(updateReceipt, 0); // recalc 이후 값 반영
     });
 
-    /* ── 총액 값 변경 시 pulse 애니메이션 ── */
+    /* ── 총액 값 변경 시 pulse 애니메이션 + 견적 row 값 페이드 ── */
     if ('MutationObserver' in window){
       var prevTotal = totalEl.textContent;
       new MutationObserver(function(){
@@ -3607,6 +3756,19 @@
         void totalEl.offsetWidth;
         totalEl.classList.add('is-pulse');
       }).observe(totalEl, { childList:true, characterData:true, subtree:true });
+
+      // 각 견적 row 값(.crs-val)도 값 변경 시 페이드 애니메이션
+      document.querySelectorAll('.crs-val').forEach(function(el){
+        var prev = el.textContent;
+        new MutationObserver(function(){
+          var now = el.textContent;
+          if (now === prev) return;
+          prev = now;
+          el.classList.remove('is-anim');
+          void el.offsetWidth;
+          el.classList.add('is-anim');
+        }).observe(el, { childList:true, characterData:true, subtree:true });
+      });
     }
 
     // 초기 렌더 (recalc는 이미 실행됨 · 견적서만 초기 채움)
