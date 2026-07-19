@@ -4768,7 +4768,7 @@
         return;
       }
       var s = document.createElement('script');
-      s.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=" +
+      s.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" +
         encodeURIComponent(KAKAO_APP_KEY) + "&autoload=false&libraries=services";
       s.onload = function(){
         window.kakao.maps.load(function(){ resolve(); });
