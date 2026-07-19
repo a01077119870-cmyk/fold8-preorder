@@ -3617,6 +3617,11 @@
 </div>
 
 <script>
+  /* Kakao JavaScript SDK 앱키 (모든 loadKakaoSDK 호출보다 먼저 선언되어야 함 —
+     이전에는 KAKAO 섹션 안(line ~4750)에 있어서 초기 renderRegionMarkers 시점에
+     var 호이스팅으로 undefined로 읽혀 "앱키 미설정" reject → showMapFallback 발생.) */
+  var KAKAO_APP_KEY = "80d58aeb4e69096faa8e1c254bfc0510";
+
   (function(){
     // 사전예약 시작: 2026-07-28 00:00:00 (KST 기준으로 고정)
     var target = new Date("2026-07-28T00:00:00+09:00").getTime();
@@ -4747,8 +4752,6 @@
      - 매장 선택 → 해당 마커만 강조(활성 아이콘 + BOUNCE + InfoWindow)
      - Marker Pool 로 마커 재생성 최소화
      ============================================================ */
-  var KAKAO_APP_KEY = "80d58aeb4e69096faa8e1c254bfc0510";  // JavaScript 키
-
   var kakaoMap = null;
   var kakaoGeocoder = null;
   var mapCenterFallback = { lat: 37.3225, lng: 126.8309 }; // 안산시청 근처
@@ -5199,9 +5202,14 @@
           });
 
           // 지역 탭 자동 전환 (프로그래매틱)
+          // force:true — 이미 활성 지역이어도 setActiveRegion → renderRegionMarkers를
+          // 강제로 트리거해 지도 lazy-init이 반드시 일어나게 함. (이 처리 없으면
+          // 사용자의 현재 위치가 이미 활성 지역에 속할 때 지도가 안 뜨는 버그)
           var targetTab = document.querySelector('.region-tab[data-region="' + nearest.region + '"]');
-          if (targetTab && !targetTab.classList.contains('is-active')){
-            targetTab.__nearestChange = true;
+          if (targetTab) targetTab.__nearestChange = true;
+          if (typeof window.__setActiveRegion === 'function'){
+            window.__setActiveRegion(nearest.region, { force: true });
+          } else if (targetTab && !targetTab.classList.contains('is-active')){
             targetTab.click();
           }
           // 매장 선택 반영
