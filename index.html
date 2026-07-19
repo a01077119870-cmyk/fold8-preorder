@@ -3984,7 +3984,7 @@
     }
     planSel.addEventListener('change', syncPlanChips);
 
-    /* ── 가입유형 chip (시각 활성만 — 계산 영향 없음) ── */
+    /* ── 가입유형 chip (시각 활성 + 추가지원금 정책 자동 반영) ── */
     if (signupChipsBox){
       signupChipsBox.querySelectorAll('.calc-chip').forEach(function(chip){
         chip.addEventListener('click', function(){
@@ -3993,9 +3993,58 @@
             c.classList.toggle('is-active', active);
             c.setAttribute('aria-selected', active ? 'true' : 'false');
           });
+          applyDealerSubsidyPolicy();
         });
       });
     }
+
+    /* ══════════════════════════════════════════════════════
+       추가지원금 정책 테이블 (Policy Table)
+       - key: 요금제 월 정액(원)
+       - value: { change: 기기변경, new: 신규가입, mnp: 번호이동 }
+       - 정책 변경 시 이 테이블의 숫자만 수정하면 전체 반영
+       ══════════════════════════════════════════════════════ */
+    var additionalSupportPolicy = {
+      85000:  { change: 200000, new: 200000, mnp: 300000 },
+      95000:  { change: 210000, new: 210000, mnp: 310000 },
+      105000: { change: 220000, new: 220000, mnp: 320000 },
+      115000: { change: 250000, new: 250000, mnp: 350000 }
+    };
+
+    /* signup chip data-signup 값 → policy key 매핑 */
+    var SIGNUP_TO_POLICY_KEY = { change: 'change', new: 'new', move: 'mnp' };
+
+    function getCurrentSignupKey(){
+      if (!signupChipsBox) return 'change';
+      var active = signupChipsBox.querySelector('.calc-chip.is-active');
+      var raw = active ? active.getAttribute('data-signup') : 'change';
+      return SIGNUP_TO_POLICY_KEY[raw] || 'change';
+    }
+
+    function getCurrentPlanPrice(){
+      if (!planSel) return 0;
+      var opt = planSel.options[planSel.selectedIndex];
+      if (!opt) return 0;
+      var raw = opt.getAttribute('data-price');
+      return parseInt(raw, 10) || 0;
+    }
+
+    function applyDealerSubsidyPolicy(){
+      if (!dealerEl) return;
+      var planPrice = getCurrentPlanPrice();
+      var signupKey = getCurrentSignupKey();
+      var policy = additionalSupportPolicy[planPrice];
+      var amount = (policy && policy[signupKey]) || 0;
+      // 콤마 포맷 + 기존 recalc 트리거 (input 이벤트 재사용)
+      dealerEl.value = amount > 0 ? amount.toLocaleString('ko-KR') : '0';
+      dealerEl.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    /* 요금제 변경 시에도 자동 갱신 */
+    planSel.addEventListener('change', applyDealerSubsidyPolicy);
+
+    /* 초기 진입 시 1회 적용 */
+    applyDealerSubsidyPolicy();
 
     /* ── 우측 견적서 실시간 미러링 ── */
     function parseNum(str){ return parseInt(String(str).replace(/[^0-9]/g,''), 10) || 0; }
